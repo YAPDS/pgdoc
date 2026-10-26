@@ -1,0 +1,22 @@
+# Hugo build output and local tools
+/public/
+/resources/
+/.hugo_build.lock
+/.build/
+/.netlify/
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+/.venv/
+/.pytest_cache/
+/.mypy_cache/
+/.ruff_cache/
+/.coverage
+/htmlcov/
+
+# Local editor and operating-system files
+.DS_Store
+Thumbs.db
+*.swp
+*~

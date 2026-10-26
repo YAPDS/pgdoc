@@ -1,0 +1,10 @@
+{{ define "main" }}
+<div class="breadcrumb"><a href="{{ .Site.Home.RelPermalink }}">{{ i18n "home" }}</a><span>/</span>{{ .Title }}</div>
+{{ if .Params.upstream }}
+  {{ partial "version-links.html" . }}
+  <article class="article article-upstream"><header class="article-header"><span class="eyebrow">{{ i18n "manualLabel" }}</span><h1>{{ .Title }}</h1></header><div class="prose">{{ .Content }}</div></article>
+{{ else }}
+  <header class="page-heading"><span class="eyebrow">{{ i18n "documentation" }}</span><h1>{{ .Title }}</h1>{{ with .Content }}<div class="intro">{{ . }}</div>{{ end }}</header>
+  {{ partial "version-links.html" . }}
+{{ end }}
+{{ end }}

@@ -1,0 +1,80 @@
+[home]
+other = "Home"
+[documentation]
+other = "Documentation"
+[mainNavigation]
+other = "Main navigation"
+[language]
+other = "Language"
+[manualHome]
+other = "Manual home"
+[manualLabel]
+other = "POSTGRESQL OFFICIAL MANUAL"
+[openContents]
+other = "Contents"
+[closeContents]
+other = "Close contents"
+[closeSearch]
+other = "Close search"
+[searchManual]
+other = "Search documentation"
+[searchShort]
+other = "Search"
+[searchPlaceholder]
+other = "Search titles or keywords…"
+[searchVersion]
+other = "Version"
+[searchAllVersions]
+other = "All versions"
+[searchEmpty]
+other = "Enter a keyword to search titles and summaries"
+[searchNoResults]
+other = "No matching pages found"
+[searchError]
+other = "Search index failed to load. Please refresh and try again."
+[manualNavigation]
+other = "Manual navigation"
+[manualContents]
+other = "Manual contents"
+[officialVersions]
+other = "PostgreSQL versions"
+[pageContents]
+other = "On this page"
+[siteTagline]
+other = "Official PostgreSQL documentation"
+[sourceTagline]
+other = "Built from PostgreSQL documentation sources"
+[heroTitle]
+other = "PostgreSQL Documentation"
+[heroLead]
+other = "Read the official PostgreSQL manuals by version, from the tutorial and SQL language to server administration."
+[chooseVersion]
+other = "Choose a version"
+[byVersion]
+other = "Browse by version"
+[fullTextSearch]
+other = "Search all pages"
+[manualVersions]
+other = "Manual versions"
+[versionShort]
+other = "Version:"
+[versionsShort]
+other = "Versions"
+[switchVersion]
+other = "Switch documentation version"
+[availableVersions]
+other = "Available Versions:"
+[developmentVersion]
+other = "Development Version:"
+[viewAll]
+other = "View all"
+[readManual]
+other = "Read manual"
+[openManual]
+other = "Open manual"
+[readArticle]
+other = "Read article"
+[expandOrCollapse]
+other = "Expand or collapse"
+[navigationError]
+other = "Navigation failed to load. Please try again."

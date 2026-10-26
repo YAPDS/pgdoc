@@ -1,0 +1,6 @@
+{{ define "main" }}
+<div class="breadcrumb"><a href="{{ .Site.Home.RelPermalink }}">{{ i18n "home" }}</a><span>/</span>{{ .Title }}</div>
+<header class="page-heading"><span class="eyebrow">{{ i18n "documentation" }}</span><h1>{{ .Title }}</h1>{{ with .Content }}<div class="intro">{{ . }}</div>{{ end }}</header>
+{{ if .Sections }}<div class="listing-grid">{{ range .Sections.ByTitle }}<a class="listing-card" href="{{ .RelPermalink }}"><span class="listing-icon">▤</span><h2>{{ .Title }}</h2><span>{{ i18n "openManual" }} →</span></a>{{ end }}</div>{{ end }}
+{{ if .RegularPages }}<div class="listing-grid">{{ range .RegularPages.ByTitle }}<a class="listing-card" href="{{ .RelPermalink }}"><span class="listing-icon">◫</span><h2>{{ .Title }}</h2><span>{{ i18n "readArticle" }} →</span></a>{{ end }}</div>{{ end }}
+{{ end }}

@@ -1,0 +1,29 @@
+{{- $current := .Params.source_version -}}
+{{- $filename := "" -}}
+{{- if and .Params.upstream (not .IsSection) -}}
+  {{- $filename = path.Base .RelPermalink -}}
+{{- end -}}
+{{- with .Site.GetPage "/postgresql" -}}
+  {{- $versions := .Sections.ByWeight -}}
+  <nav class="pg-version-nav" aria-label="{{ i18n "manualVersions" }}">
+    <div class="pg-version-row">
+      <span class="pg-version-label">{{ i18n "availableVersions" }}</span>
+      <span class="pg-version-list">
+        {{- range $i, $version := where $versions "Params.source_version" "ne" "devel" -}}
+          {{- if $i }}<span class="pg-version-separator" aria-hidden="true"> / </span>{{ end -}}
+          {{- $slug := .Params.source_version -}}
+          {{- $label := replace (replace .Title "PostgreSQL " "") " Documentation" "" -}}
+          {{- $href := partial "version-target.html" (dict "version" . "filename" $filename) -}}
+          <a href="{{ $href }}"{{ if eq $current $slug }} class="docs-version-selected" aria-current="page"{{ end }}>{{ $label }}</a>
+        {{- end -}}
+      </span>
+    </div>
+    {{- range where $versions "Params.source_version" "eq" "devel" -}}
+      {{- $href := partial "version-target.html" (dict "version" . "filename" $filename) -}}
+      <div class="pg-version-row">
+        <span class="pg-version-label">{{ i18n "developmentVersion" }}</span>
+        <span class="pg-version-list"><a href="{{ $href }}"{{ if eq $current "devel" }} class="docs-version-selected" aria-current="page"{{ end }}>{{ replace (replace .Title "PostgreSQL " "") " Documentation" "" }}</a></span>
+      </div>
+    {{- end -}}
+  </nav>
+{{- end -}}

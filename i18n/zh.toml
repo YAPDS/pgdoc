@@ -1,0 +1,80 @@
+[home]
+other = "首页"
+[documentation]
+other = "文档"
+[mainNavigation]
+other = "主导航"
+[language]
+other = "语言"
+[manualHome]
+other = "手册首页"
+[manualLabel]
+other = "POSTGRESQL 中文手册"
+[openContents]
+other = "目录"
+[closeContents]
+other = "关闭目录"
+[closeSearch]
+other = "关闭搜索"
+[searchManual]
+other = "搜索文档"
+[searchShort]
+other = "搜索"
+[searchPlaceholder]
+other = "搜索标题或关键词…"
+[searchVersion]
+other = "版本"
+[searchAllVersions]
+other = "全部版本"
+[searchEmpty]
+other = "输入关键词搜索标题和摘要"
+[searchNoResults]
+other = "没有找到匹配的页面"
+[searchError]
+other = "搜索索引加载失败，请刷新后重试。"
+[manualNavigation]
+other = "手册导航"
+[manualContents]
+other = "手册目录"
+[officialVersions]
+other = "PostgreSQL 版本"
+[pageContents]
+other = "本页目录"
+[siteTagline]
+other = "PostgreSQL 中文文档"
+[sourceTagline]
+other = "译文来自 pgsty/pgdoc"
+[heroTitle]
+other = "PostgreSQL 中文文档"
+[heroLead]
+other = "按版本阅读 PostgreSQL 中文手册，查阅 SQL、管理、开发和参考资料。"
+[chooseVersion]
+other = "选择版本"
+[byVersion]
+other = "按版本浏览"
+[fullTextSearch]
+other = "搜索全部页面"
+[manualVersions]
+other = "手册版本"
+[versionShort]
+other = "版本："
+[versionsShort]
+other = "版本"
+[switchVersion]
+other = "切换文档版本"
+[availableVersions]
+other = "正式版本："
+[developmentVersion]
+other = "开发版本："
+[viewAll]
+other = "查看全部"
+[readManual]
+other = "阅读手册"
+[openManual]
+other = "打开手册"
+[readArticle]
+other = "阅读文章"
+[expandOrCollapse]
+other = "展开或收起"
+[navigationError]
+other = "目录加载失败，请重试。"

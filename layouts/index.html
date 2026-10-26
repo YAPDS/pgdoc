@@ -1,0 +1,18 @@
+{{ define "main" }}
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-inner">
+    <h1 id="hero-title">PostgreSQL {{ i18n "documentation" }}</h1>
+    <p class="hero-lead">{{ i18n "heroLead" }}</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="#versions">{{ i18n "chooseVersion" }} <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+{{ with .Site.GetPage "/postgresql" }}
+<section class="home-section version-section" id="versions">
+  <div class="section-heading"><div><span class="eyebrow">{{ i18n "versionsShort" }}</span><h2>{{ i18n "manualVersions" }}</h2></div><a href="{{ .RelPermalink }}">{{ i18n "viewAll" }} →</a></div>
+  <div class="intro">{{ .Content }}</div>
+  {{ partial "version-links.html" . }}
+</section>
+{{ end }}
+{{ end }}

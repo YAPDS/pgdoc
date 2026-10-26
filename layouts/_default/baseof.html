@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="{{ .Site.Language.LanguageCode }}" data-search-empty="{{ i18n "searchEmpty" }}" data-search-no-results="{{ i18n "searchNoResults" }}" data-search-error="{{ i18n "searchError" }}" data-expand-or-collapse="{{ i18n "expandOrCollapse" }}" data-navigation-error="{{ i18n "navigationError" }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ .Site.Params.description }}">
+  <title>{{ if not .IsHome }}{{ .Title }} · {{ end }}{{ .Site.Title }}</title>
+  <link rel="icon" href="{{ "img/postgresql-elephant.png" | relURL }}" type="image/png">
+  <link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "css/manual-nav.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "css/pgweb-theme.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "css/docbook.css" | relURL }}">
+  <link rel="canonical" href="{{ .Permalink }}">
+  {{ range .AllTranslations }}<link rel="alternate" hreflang="{{ .Language.LanguageCode }}" href="{{ .Permalink }}">{{ end }}
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="{{ .Site.Home.RelPermalink }}" aria-label="{{ i18n "manualHome" }}"><img class="brand-logo" src="{{ "img/postgresql-elephant.png" | relURL }}" alt=""><span>PostgreSQL <strong>{{ i18n "documentation" }}</strong></span></a>
+      <nav class="top-nav" aria-label="{{ i18n "mainNavigation" }}">
+        <a href="{{ .Site.Home.RelPermalink }}">{{ i18n "home" }}</a>
+        {{ with .Site.GetPage "/postgresql" }}<a class="{{ if eq $.Section "postgresql" }}is-active{{ end }}" href="{{ .RelPermalink }}">{{ i18n "documentation" }}</a>{{ end }}
+      </nav>
+      {{ if not .IsHome }}<button class="mobile-nav-trigger" type="button" id="manual-nav-open" aria-controls="manual-sidebar" aria-expanded="false">{{ i18n "openContents" }}</button>{{ end }}
+      {{ partial "header-version-menu.html" . }}
+      {{ partial "header-language-menu.html" . }}
+      <button class="search-trigger" type="button" id="search-open" aria-label="{{ i18n "searchManual" }}"><span aria-hidden="true">⌕</span> {{ i18n "searchShort" }} <kbd>/</kbd></button>
+    </div>
+  </header>
+  <div class="pgweb-bar"><div class="shell">{{ i18n "siteTagline" }} <span>·</span> {{ i18n "sourceTagline" }}</div></div>
+  <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+  <div class="shell page-shell{{ if eq .Section "postgresql" }} manual-layout{{ end }}">
+    {{ if not .IsHome }}
+    <aside class="sidebar" id="manual-sidebar" aria-label="{{ i18n "manualNavigation" }}">
+      <div class="sidebar-heading"><div class="side-label">{{ i18n "manualContents" }}</div><button class="mobile-nav-close" id="manual-nav-close" type="button" aria-label="{{ i18n "closeContents" }}">×</button></div>
+      {{ with .Site.GetPage "/postgresql" }}<a class="side-link" href="{{ .RelPermalink }}">{{ i18n "officialVersions" }}</a>{{ end }}
+      {{ if .Params.upstream }}
+        {{ partial "manual-nav.html" . }}
+      {{ else if eq .Section "postgresql" }}
+        {{ with .Site.GetPage "/postgresql" }}
+          {{ range .Sections.ByWeight }}<a class="side-link side-child" href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}
+        {{ end }}
+      {{ end }}
+    </aside>
+    {{ end }}
+    <main class="main-content{{ if .IsHome }} home-content{{ end }}" id="main">
+      {{ block "main" . }}{{ end }}
+    </main>
+    {{ if and (not .IsHome) (ne .Section "postgresql") .TableOfContents }}
+    <aside class="toc" aria-label="{{ i18n "pageContents" }}">
+      <div class="side-label">{{ i18n "pageContents" }}</div>
+      {{ .TableOfContents }}
+    </aside>
+    {{ end }}
+  </div>
+  <footer class="site-footer"><div class="shell">{{ i18n "siteTagline" }}</div></footer>
+  <dialog class="search-dialog" id="search-dialog" aria-label="{{ i18n "searchManual" }}">
+    <div class="search-box">
+      <div class="search-head"><label for="search-input">{{ i18n "searchManual" }}</label><button type="button" id="search-close" aria-label="{{ i18n "closeSearch" }}">×</button></div>
+      <input id="search-input" type="search" placeholder="{{ i18n "searchPlaceholder" }}" autocomplete="off">
+      <label class="search-version-label" for="search-version">{{ i18n "searchVersion" }}</label>
+      <div class="search-version-control">
+        <select id="search-version" class="search-version">
+          <option value="all">{{ i18n "searchAllVersions" }}</option>
+          {{- with .Site.GetPage "/postgresql" -}}
+            {{- range .Sections.ByWeight -}}
+              <option value="{{ .Params.source_version }}">{{ replace .Title " Documentation" "" }}</option>
+            {{- end -}}
+          {{- end -}}
+        </select>
+      </div>
+      <div id="search-results" class="search-results" aria-live="polite"></div>
+    </div>
+  </dialog>
+  <script src="{{ "js/site.js" | relURL }}" defer></script>
+</body>
+</html>

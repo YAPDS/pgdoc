@@ -1,0 +1,23 @@
+/* Preserve the layout conventions of PostgreSQL's generated DocBook HTML. */
+.article-upstream .prose table{display:table;overflow:visible;border-collapse:collapse;width:100%;max-width:100%}
+.article-upstream .prose .navheader table,.article-upstream .prose .navfooter table{width:100%;font-size:12px}
+.article-upstream .prose .navheader th,.article-upstream .prose .navheader td,.article-upstream .prose .navfooter th,.article-upstream .prose .navfooter td{border:0;background:transparent;padding:3px 5px}
+.article-upstream .prose th,.article-upstream .prose td{padding:6px 8px}
+.article-upstream .prose .navheader hr,.article-upstream .prose .navfooter hr{border:0;border-top:1px solid #dee2e6}
+.article-upstream .prose .table,.article-upstream .prose .informaltable{max-width:100%;overflow-x:auto}
+.article-upstream .prose .variablelist dt{font-weight:600;margin-top:.9em}
+.article-upstream .prose .variablelist dd{margin-left:1.5em}
+.article-upstream .prose .variablelist dd p:first-child{margin-top:.3em}
+.article-upstream .prose .example{border-left:2px solid #336791;margin:1em 0;padding-left:12px}
+.article-upstream .prose .tip,.article-upstream .prose .note,.article-upstream .prose .important,.article-upstream .prose .caution,.article-upstream .prose .warning{border-left:4px solid #336791;background:#f2f6f9;margin:1.25em 0;padding:10px 14px}
+.article-upstream .prose .caution,.article-upstream .prose .warning{border-left-color:#c97832;background:#fff8ee}
+.article-upstream .prose .mediaobject{max-width:100%}
+.article-upstream .prose .id_link{color:inherit;visibility:hidden}
+.article-upstream .prose *:hover>.id_link{visibility:visible}
+.article-upstream .prose .option{white-space:nowrap}
+.article-upstream .prose acronym{font-style:inherit}
+.article-upstream .prose pre{padding:12px 14px}
+.article-upstream .prose pre.literallayout,.article-upstream .prose pre.screen,.article-upstream .prose pre.synopsis,.article-upstream .prose pre.programlisting{white-space:pre;overflow-x:auto}
+.article-upstream .prose .func_table_entry p,.article-upstream .prose .catalog_table_entry p{margin:.1em 0;padding-left:4em}
+.article-upstream .prose .func_signature,.article-upstream .prose .column_definition{text-indent:-3.5em}
+@media(max-width:760px){.article-upstream .prose .variablelist dd{margin-left:.75em}}

@@ -1,0 +1,55 @@
+{{- $version := .Params.source_version -}}
+{{- $file := "index.html" -}}
+{{- if not .IsSection -}}{{- $file = path.Base .RelPermalink -}}{{- end -}}
+{{- $navigation := .Site.Data.manual_nav -}}
+{{- $publicPrefix := "" -}}
+{{- if eq .Language.Lang "zh" -}}
+  {{- $navigation = index $navigation "zh" -}}
+  {{- $publicPrefix = "zh/" -}}
+{{- end -}}
+{{- with $navigation -}}
+  {{- with index . $version -}}
+    {{- $ancestors := default (slice) (index .parents $file) -}}
+    <a class="manual-nav-home{{ if eq $file "index.html" }} is-current{{ end }}" href="{{ printf "%spostgresql/%s/" $publicPrefix $version | relURL }}"{{ if eq $file "index.html" }} aria-current="page"{{ end }}>{{ i18n "manualHome" }}</a>
+    <nav class="manual-tree" aria-label="{{ i18n "manualContents" }}" data-nav-url="{{ printf "%smanual-nav/%s.json" $publicPrefix $version | relURL }}" data-manual-base="{{ printf "%spostgresql/%s/" $publicPrefix $version | relURL }}">
+      {{- range $i, $node := .sections -}}
+        {{- template "manual-nav-node" (dict "node" $node "version" $version "prefix" $publicPrefix "current" $file "ancestors" $ancestors "depth" 0 "path" (printf "%d" $i)) -}}
+      {{- end -}}
+    </nav>
+  {{- end -}}
+{{- end -}}
+
+{{- define "manual-nav-node" -}}
+  {{- $node := .node -}}
+  {{- $activePath := or (eq .current $node.page) (in .ancestors $node.page) -}}
+  {{- $currentLink := and (eq .current $node.page) (eq $node.href $node.page) -}}
+  {{- $expanded := or $activePath (and (eq .depth 0) (eq .current "index.html")) -}}
+  {{- $showChildren := gt (len $node.children) 0 -}}
+  {{- $renderChildren := or (eq .depth 0) $activePath -}}
+  {{- $id := printf "nav-%s-%s" .version .path -}}
+  <div class="manual-nav-node depth-{{ .depth }}{{ if $activePath }} is-active-path{{ end }}">
+    <div class="manual-nav-row">
+      {{- if $showChildren -}}
+      <button class="manual-nav-toggle" type="button" aria-controls="{{ $id }}" aria-expanded="{{ $expanded }}" aria-label="{{ i18n "expandOrCollapse" }} {{ $node.title }}"><span aria-hidden="true">›</span></button>
+      {{- else -}}
+      <span class="manual-nav-spacer" aria-hidden="true"></span>
+      {{- end -}}
+      <a class="manual-nav-link{{ if $currentLink }} is-current{{ end }}" href="{{ printf "%spostgresql/%s/%s" .prefix .version $node.href | relURL }}"{{ if $currentLink }} aria-current="page"{{ end }}>{{ $node.title }}</a>
+    </div>
+    {{- if $showChildren -}}
+    <div class="manual-nav-children" id="{{ $id }}" data-nav-path="{{ .path }}"{{ if $renderChildren }} data-loaded="true"{{ end }}{{ if not $expanded }} hidden{{ end }}>
+      {{- if $renderChildren -}}
+      {{- $nextDepth := add .depth 1 -}}
+      {{- $version := .version -}}
+      {{- $prefix := .prefix -}}
+      {{- $current := .current -}}
+      {{- $ancestors := .ancestors -}}
+      {{- $parentPath := .path -}}
+      {{- range $i, $child := $node.children -}}
+        {{- template "manual-nav-node" (dict "node" $child "version" $version "prefix" $prefix "current" $current "ancestors" $ancestors "depth" $nextDepth "path" (printf "%s-%d" $parentPath $i)) -}}
+      {{- end -}}
+      {{- end -}}
+    </div>
+    {{- end -}}
+  </div>
+{{- end -}}

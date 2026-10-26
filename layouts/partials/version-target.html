@@ -1,0 +1,13 @@
+{{- $href := .version.RelPermalink -}}
+{{- with .filename -}}
+  {{- $slug := $.version.Params.source_version -}}
+  {{- $contentRoot := printf "content/%s" $.version.Language.Lang -}}
+  {{- $publicPrefix := "" -}}
+  {{- if eq $.version.Language.Lang "zh" -}}
+    {{- $publicPrefix = "zh/" -}}
+  {{- end -}}
+  {{- if fileExists (printf "%s/postgresql/%s/%s" $contentRoot $slug .) -}}
+    {{- $href = printf "%spostgresql/%s/%s" $publicPrefix $slug . | relURL -}}
+  {{- end -}}
+{{- end -}}
+{{- return $href -}}

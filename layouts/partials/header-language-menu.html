@@ -1,0 +1,11 @@
+{{- if gt (len .AllTranslations) 1 -}}
+  {{- $current := .Language.Lang -}}
+  <details class="header-version-menu header-language-menu" id="header-language-menu">
+    <summary aria-label="{{ i18n "language" }}: {{ .Language.LanguageName }}"><strong class="header-language-long">{{ .Language.LanguageName }}</strong><strong class="header-language-short" aria-hidden="true">{{ if eq $current "zh" }}中文{{ else }}EN{{ end }}</strong><span class="header-version-chevron" aria-hidden="true"></span></summary>
+    <nav class="header-version-list header-language-list" aria-label="{{ i18n "language" }}">
+      {{- range .AllTranslations -}}
+        <a href="{{ .RelPermalink }}" lang="{{ .Language.LanguageCode }}"{{ if eq .Language.Lang $current }} class="is-current" aria-current="page"{{ end }}>{{ .Language.LanguageName }}</a>
+      {{- end -}}
+    </nav>
+  </details>
+{{- end -}}
