@@ -1,6 +1,6 @@
 /* Preserve the layout conventions of PostgreSQL's generated DocBook HTML. */
-.article-upstream .prose table{display:table;overflow:visible;border-collapse:collapse;width:100%;max-width:100%}
-.article-upstream .prose .navheader table,.article-upstream .prose .navfooter table{width:100%;font-size:12px}
+.article-upstream .prose table{display:table;overflow:visible;border-collapse:collapse;width:100%;max-width:100%;font-size:inherit}
+.article-upstream .prose .navheader table,.article-upstream .prose .navfooter table{width:100%;font-size:inherit}
 .article-upstream .prose .navheader th,.article-upstream .prose .navheader td,.article-upstream .prose .navfooter th,.article-upstream .prose .navfooter td{border:0;background:transparent;padding:3px 5px}
 .article-upstream .prose th,.article-upstream .prose td{padding:6px 8px}
 .article-upstream .prose .navheader hr,.article-upstream .prose .navfooter hr{border:0;border-top:1px solid #dee2e6}

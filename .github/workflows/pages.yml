@@ -16,6 +16,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    permissions:
+      contents: write
+      pages: read
     steps:
       - name: Check out website
         uses: actions/checkout@v6
@@ -48,6 +51,22 @@ jobs:
 
       - name: Build website
         run: hugo --cleanDestinationDir --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+
+      - name: Commit and push updated manuals
+        run: |
+          git add -A -- \
+            content/en/postgresql content/zh/postgresql \
+            data/manual_nav data/manual-sources.json data/manual-sources-zh.json \
+            static/manual-nav static/postgresql \
+            static/zh/manual-nav static/zh/postgresql
+          if git diff --cached --quiet; then
+            echo "Manual snapshots are already up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "docs: refresh PostgreSQL manuals"
+          git push origin "HEAD:${GITHUB_REF}"
 
       - name: Upload website
         uses: actions/upload-pages-artifact@v4

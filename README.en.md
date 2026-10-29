@@ -69,6 +69,6 @@ After updating, commit `content/en/`, `content/zh/`, `data/manual_nav/`, `static
 
 ## Deployment
 
-`.github/workflows/pages.yml` runs `make refresh`, `make sync-pgdoc`, and a Hugo build every day at **00:00 UTC**, then deploys to GitHub Pages. You can also trigger it manually from the Actions tab. The workflow sets Hugo's `baseURL` to the URL provided by GitHub Pages and uses the updated snapshots for that deployment, but does not commit them back to this repository. For the first deployment, set **Settings → Pages → Build and deployment → Source** to **GitHub Actions**.
+`.github/workflows/pages.yml` runs `make refresh`, `make sync-pgdoc`, and a Hugo build every day at **00:00 UTC**. After a successful build, it pushes changed manual snapshots, assets, navigation data, and source-commit records to the branch that triggered the workflow, then deploys to GitHub Pages. It skips the commit when nothing has changed. You can also trigger it manually from the Actions tab. The workflow sets Hugo's `baseURL` to the URL provided by GitHub Pages. For the first deployment, set **Settings → Pages → Build and deployment → Source** to **GitHub Actions** and allow the workflow's `GITHUB_TOKEN` to write to the repository.
 
 You can also publish `public/` to another static host. For Netlify, see `netlify.toml`: use this repository as the site root, `make build` as the build command, and `public` as the publish directory.

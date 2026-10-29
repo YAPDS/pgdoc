@@ -69,6 +69,6 @@ make import-postgres VERSION=18 HTML_DIR=/absolute/path/to/html
 
 ## 发布
 
-`.github/workflows/pages.yml` 每天 **00:00 UTC** 执行 `make refresh`、`make sync-pgdoc` 和 Hugo 构建，随后发布到 GitHub Pages；也可在 Actions 页面手动触发。workflow 会使用 GitHub Pages 提供的站点地址设置 Hugo `baseURL`，并将本次更新的快照用于部署，但不会提交回源码仓库。首次使用时，在仓库 **Settings → Pages → Build and deployment → Source** 中选择 **GitHub Actions**。
+`.github/workflows/pages.yml` 每天 **00:00 UTC** 执行 `make refresh`、`make sync-pgdoc` 和 Hugo 构建；构建成功后将变化的文档快照、资源、目录和来源提交记录推送到触发 workflow 的分支，再发布到 GitHub Pages。没有文档变化时跳过提交。也可在 Actions 页面手动触发。workflow 使用 GitHub Pages 提供的站点地址设置 Hugo `baseURL`。首次使用时，在仓库 **Settings → Pages → Build and deployment → Source** 中选择 **GitHub Actions**；运行时需要允许 `GITHUB_TOKEN` 写入仓库。
 
 也可以将 `public/` 发布到其他静态托管平台。Netlify 配置见 `netlify.toml`：站点根目录为本仓库，构建命令为 `make build`，发布目录为 `public`。
