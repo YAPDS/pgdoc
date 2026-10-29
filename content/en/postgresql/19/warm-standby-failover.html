@@ -72,4 +72,28 @@ url = "/postgresql/19/warm-standby-failover.html"
     If you're setting up reporting servers that are only used to offload
     read-only queries from the primary, not for high availability purposes,
     you don't need to promote.
-   </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="warm-standby.html" title="26.2. Log-Shipping Standby Servers">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="high-availability.html" title="Chapter 26. High Availability, Load Balancing, and Replication">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="hot-standby.html" title="26.4. Hot Standby">Next</a></td></tr><tr><td width="40%" align="left" valign="top">26.2. Log-Shipping Standby Servers </td><td width="20%" align="center"><a accesskey="h" href="index.html" title="PostgreSQL 19rc1 Documentation">Home</a></td><td width="40%" align="right" valign="top"> 26.4. Hot Standby</td></tr></table></div>
+   </p><div class="note"><h3 class="title">Note</h3><p>
+     On a standby with <a class="xref" href="runtime-config-wal.html#GUC-WAL-LEVEL">wal_level</a> set to
+     <code class="literal">replica</code> that has a valid logical replication slot at
+     the end of recovery, including a failover slot synchronized from the
+     primary, promotion waits until every process has refreshed its setting for
+     whether to include logical decoding information in WAL records.  A backend
+     that is blocked sending data to a client that has stopped reading cannot
+     do that, so promotion waits until the client goes away or the connection
+     is dropped, which can take a long time. While it waits, the startup
+     process logs a message of the form <code class="literal">still waiting for backend with
+     PID <em class="replaceable"><code>nnn</code></em> to accept ProcSignalBarrier</code>
+     every 5 seconds.
+    </p><p>
+     If promotion is already waiting, calling
+     <code class="function">pg_terminate_backend()</code> on the logged process ID lets
+     promotion finish.  This does not work if the backend is blocked sending
+     an error message, because the error is sent with interrupts held.  In
+     that case, close the client connection.
+    </p><p>
+     To bound such waits, configure <a class="xref" href="runtime-config-connection.html#GUC-TCP-USER-TIMEOUT">tcp_user_timeout</a>
+     on the standby ahead of time, for example in
+     <code class="filename">postgresql.conf</code>, where supported by the operating
+     system.  Setting it after a backend is already blocked sending data has
+     no effect on that backend.
+    </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="warm-standby.html" title="26.2. Log-Shipping Standby Servers">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="high-availability.html" title="Chapter 26. High Availability, Load Balancing, and Replication">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="hot-standby.html" title="26.4. Hot Standby">Next</a></td></tr><tr><td width="40%" align="left" valign="top">26.2. Log-Shipping Standby Servers </td><td width="20%" align="center"><a accesskey="h" href="index.html" title="PostgreSQL 19rc1 Documentation">Home</a></td><td width="40%" align="right" valign="top"> 26.4. Hot Standby</td></tr></table></div>

@@ -309,6 +309,14 @@ openssl x509 -req -in server.csr -text -days 365 \
     value for <em class="replaceable"><code>SSL_passphrase_cmd_reload</code></em> is
     <code class="literal">off</code>.
    </p><p>
+    On <span class="systemitem">Windows</span>, all connections will
+    perform a configuration reload due to the different process model of that
+    platform, so <em class="replaceable"><code>SSL_passphrase_cmd_reload</code></em> must be
+    set to <code class="literal">on</code> for every entry which has an
+    <em class="replaceable"><code>SSL_passphrase_cmd</code></em>.  If an entry fails to load
+    at backend start, SSL connections for the hosts of that entry will fail,
+    while the other entries remain usable.
+   </p><p>
     <em class="replaceable"><code>hostname</code></em> can be either the literal
     hostname for the connection, <code class="literal">/no_sni/</code>, or <code class="literal">*</code>.
     <a class="xref" href="ssl-tcp.html#HOSTNAME-VALUES" title="Table 18.3. Hostname Field Values">Table 18.3</a> contains details on how these values are

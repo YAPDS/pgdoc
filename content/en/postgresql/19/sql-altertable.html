@@ -747,8 +747,7 @@ WITH ( MODULUS <em class="replaceable"><code>numeric_literal</code></em>, REMAIN
       Once all those transactions have completed, the second transaction
       acquires <code class="literal">SHARE UPDATE EXCLUSIVE</code> on the partitioned
       table and <code class="literal">ACCESS EXCLUSIVE</code> on the partition,
-      and the detach process completes.  A <code class="literal">CHECK</code> constraint
-      that duplicates the partition constraint is added to the partition.
+      and the detach process completes.
       <code class="literal">CONCURRENTLY</code> cannot be run in a transaction block and
       is not allowed if the partitioned table contains a default partition.
      </p><p>

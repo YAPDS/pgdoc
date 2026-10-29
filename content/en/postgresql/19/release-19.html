@@ -106,6 +106,11 @@ Change default of <a class="link" href="runtime-config-locks.html#GUC-MAX-LOCKS-
 </p><p>
 Lock size allocation has changed, so effectively settings must now be doubled to match their capacity in previous releases.
 </p></li><li class="listitem"><p>
+Remove server variable <code class="varname">io_workers</code> (Thomas Munro)
+<a class="ulink" href="https://postgr.es/c/d1c01b79d" target="_top">§</a>
+</p><p>
+This has been replaced by four new variables;  see <a class="xref" href="release-19.html#RELEASE-19-PERFORMANCE" title="E.1.3.1.2. General Performance">Section E.1.3.1.2</a>.
+</p></li><li class="listitem"><p>
 Change <a class="link" href="jit.html" title="Chapter 30. Just-in-Time Compilation (JIT)"><acronym class="acronym">JIT</acronym></a> to be disabled by default (Jelte Fennema-Nio)
 <a class="ulink" href="https://postgr.es/c/7f8c88c2b" target="_top">§</a>
 </p><p>
@@ -117,8 +122,11 @@ Rename column <code class="structfield">sync_error_count</code> to <code class="
 </p><p>
 This is necessary since sequence errors are now tracked separately.
 </p></li><li class="listitem"><p>
-Rename wait event type <code class="literal">BUFFERPIN</code> to <code class="literal">BUFFER</code> (Andres Freund)
+Rename wait event <span class="emphasis"><em>type</em></span> <code class="literal">BUFFERPIN</code> to <code class="literal">BUFFER</code> and rename wait event <code class="literal">BufferPin</code> to <code class="literal">BufferCleanup</code> (Andres Freund)
 <a class="ulink" href="https://postgr.es/c/6c5c393b7" target="_top">§</a>
+</p></li><li class="listitem"><p>
+Remove wait event <code class="literal">BufferContent</code> and add more precise wait events <code class="literal">BufferShared</code>, <code class="literal">BufferShareExclusive</code>, and <code class="literal">BufferExclusive</code> (Andres Freund)
+<a class="ulink" href="https://postgr.es/c/fcb9c977a" target="_top">§</a>
 </p></li><li class="listitem"><p>
 Change index access method handlers to use a static <a class="link" href="indexam.html" title="Chapter 63. Index Access Method Interface Definition"><code class="structname">IndexAmRoutines</code></a> structure, rather than dynamically allocated ones (Matthias van de Meent)
 <a class="ulink" href="https://postgr.es/c/bc6374cd7" target="_top">§</a>
@@ -128,6 +136,19 @@ Remove optimizer hook get_relation_info_hook and add better-placed hook build_si
 </p></li><li class="listitem"><p>
 Change <a class="link" href="app-psql.html" title="psql"><span class="application">psql</span></a>'s <code class="literal">\crosstabview</code> command to honor the <code class="literal">\pset null</code> setting (Chao Li)
 <a class="ulink" href="https://postgr.es/c/4df5fe383" target="_top">§</a>
+</p></li><li class="listitem"><p>
+Change <a class="link" href="textsearch.html" title="Chapter 12. Full Text Search">full text search</a> and <a class="xref" href="pgtrgm.html" title="F.37. pg_trgm — support for similarity of text using trigram matching">pg_trgm</a> to use the database's locale provider for character
+classification when parsing text (Jeff Davis) <a class="ulink" href="https://postgr.es/c/e113f9c102b" target="_top">§</a>
+</p><p>
+Previously, characters were classified using libc, regardless of the locale
+provider.  In databases with a locale provider other than libc (that is, ICU
+or builtin) and where the locale configured through that locale provider
+behaves differently from the LC_CTYPE setting configured for the database
+(particularly if LC_CTYPE is the C locale), this could cause changes in
+behavior of some functions related to full text search as well as the pg_trgm
+extension.  When upgrading such databases using pg_upgrade, it is recommended
+to reindex all indexes related to full text search and pg_trgm after the
+upgrade, and to recompute any stored <code class="type">tsvector</code> values.
 </p></li><li class="listitem"><p>
 Remove <code class="literal">MULE_INTERNAL</code> encoding (Thomas Munro)
 <a class="ulink" href="https://postgr.es/c/77645d44e" target="_top">§</a>
@@ -186,7 +207,7 @@ Simplify <code class="literal">IS [NOT] TRUE/FALSE/UNKNOWN</code> to plain boole
 Speed up join selectivity computations for large optimizer statistics targets (Ilia Evdokimov, David Geier)
 <a class="ulink" href="https://postgr.es/c/057012b20" target="_top">§</a>
 </p></li><li class="listitem"><p>
-Enable proper optimizer statistics for functions returning boolean values (Tom Lane)
+Add proper optimizer statistics for functions returning boolean values (Tom Lane)
 <a class="ulink" href="https://postgr.es/c/1eccb9315" target="_top">§</a>
 </p></li><li class="listitem"><p>
 Allow <a class="link" href="sql-createstatistics.html" title="CREATE STATISTICS">extended statistics</a> on virtual generated columns (Yugo Nagata)
@@ -284,12 +305,10 @@ Add system view <a class="link" href="monitoring-stats.html#PG-STAT-RECOVERY-VIE
 <a class="ulink" href="https://postgr.es/c/01d485b14" target="_top">§</a>
 <a class="ulink" href="https://postgr.es/c/2d4ead6f4" target="_top">§</a>
 </p></li><li class="listitem"><p>
+Add system view <a class="link" href="progress-reporting.html#PG-STAT-PROGRESS-REPACK-VIEW" title="Table 27.48. pg_stat_progress_repack View"><code class="structname">pg_stat_progress_repack</code></a> to report the progress of <code class="command">REPACK</code>, <code class="command">CLUSTER</code>, and <code class="command">VACUUM FULL</code> (Álvaro Herrera)
+</p></li><li class="listitem"><p>
 Add system view <a class="link" href="monitoring-stats.html#PG-STAT-AUTOVACUUM-SCORES-VIEW" title="Table 27.32. pg_stat_autovacuum_scores View"><code class="structname">pg_stat_autovacuum_scores</code></a> to report per-table <a class="link" href="routine-vacuuming.html#AUTOVACUUM" title="24.1.6. The Autovacuum Daemon">autovacuum</a> details (Sami Imseih)
 <a class="ulink" href="https://postgr.es/c/87f61f0c8" target="_top">§</a>
-</p></li><li class="listitem"><p>
-Add system view <a class="link" href="view-pg-dsm-registry-allocations.html" title="53.8. pg_dsm_registry_allocations"><code class="structname">pg_dsm_registry_allocations</code></a> to report <a class="link" href="runtime-config-resource.html#GUC-DYNAMIC-SHARED-MEMORY-TYPE">dynamic shared memory</a> details (Florents Tselai, Nathan Bossart)
-<a class="ulink" href="https://postgr.es/c/167ed8082" target="_top">§</a>
-<a class="ulink" href="https://postgr.es/c/f894acb24" target="_top">§</a>
 </p></li><li class="listitem"><p>
 Add vacuum initiation details to system view <a class="link" href="progress-reporting.html#PG-STAT-PROGRESS-VACUUM-VIEW" title="Table 27.50. pg_stat_progress_vacuum View"><code class="structname">pg_stat_progress_vacuum</code></a> (Shinya Kato)
 <a class="ulink" href="https://postgr.es/c/0d7895206" target="_top">§</a>
@@ -300,6 +319,10 @@ Add analyze initiation details to system view <a class="link" href="progress-rep
 <a class="ulink" href="https://postgr.es/c/ab40db385" target="_top">§</a>
 </p><p>
 The new <code class="structfield">started_by</code> column reports the initiator of the analyze.
+</p></li><li class="listitem"><p>
+Add system view <a class="link" href="view-pg-dsm-registry-allocations.html" title="53.8. pg_dsm_registry_allocations"><code class="structname">pg_dsm_registry_allocations</code></a> to report <a class="link" href="runtime-config-resource.html#GUC-DYNAMIC-SHARED-MEMORY-TYPE">dynamic shared memory</a> details (Florents Tselai, Nathan Bossart)
+<a class="ulink" href="https://postgr.es/c/167ed8082" target="_top">§</a>
+<a class="ulink" href="https://postgr.es/c/f894acb24" target="_top">§</a>
 </p></li><li class="listitem"><p>
 Add <code class="structfield">mem_exceeded_count</code> column to system view <a class="link" href="monitoring-stats.html#PG-STAT-REPLICATION-SLOTS-VIEW" title="Table 27.15. pg_stat_replication_slots View"><code class="structname">pg_stat_replication_slots</code></a> (Bertrand Drouvot)
 <a class="ulink" href="https://postgr.es/c/d3b6183dd" target="_top">§</a>
@@ -394,7 +417,7 @@ Have <a class="link" href="functions-sequence.html#FUNC-PG-GET-SEQUENCE-DATA"><c
 Add function <a class="link" href="functions-info.html#FUNCTIONS-INFO-SNAPSHOT" title="9.28.8. Transaction ID and Snapshot Information Functions"><code class="function">pg_get_multixact_stats()</code></a> to report <a class="link" href="routine-vacuuming.html#VACUUM-FOR-MULTIXACT-WRAPAROUND" title="24.1.5.1. Multixacts and Wraparound">multixact</a> activity (Naga Appani)
 <a class="ulink" href="https://postgr.es/c/97b101776" target="_top">§</a>
 </p></li><li class="listitem"><p>
-Issue warnings when the <a class="link" href="routine-vacuuming.html#VACUUM-FOR-WRAPAROUND" title="24.1.5. Preventing Transaction ID Wraparound Failures">wraparound</a> of xid and multi-xids is less than 100 million (Nathan Bossart)
+Issue warnings when the <a class="link" href="routine-vacuuming.html#VACUUM-FOR-WRAPAROUND" title="24.1.5. Preventing Transaction ID Wraparound Failures">wraparound</a> of transaction IDs or multixacts is less than 100 million away (Nathan Bossart)
 <a class="ulink" href="https://postgr.es/c/48f11bfa0" target="_top">§</a>
 </p><p>
 The previous warning was 40 million.  Warnings are issued to clients and in the server log.
@@ -450,8 +473,7 @@ Allow sequence values stored in subscribers to match the publisher (Vignesh C)
 <a class="ulink" href="https://postgr.es/c/5509055d6" target="_top">§</a>
 <a class="ulink" href="https://postgr.es/c/55cefadde" target="_top">§</a>
 </p><p>
-This is enabled during <a class="link" href="sql-createsubscription.html" title="CREATE SUBSCRIPTION"><code class="command">CREATE SUBSCRIPTION</code></a>, <a class="link" href="sql-altersubscription.html" title="ALTER SUBSCRIPTION"><code class="command">ALTER SUBSCRIPTION ... REFRESH PUBLICATION</code></a>, and <a class="link" href="sql-altersubscription.html" title="ALTER SUBSCRIPTION"><code class="command">ALTER SUBSCRIPTION ... REFRESH SEQUENCES</code></a>.  The latter only updates values, not sequence
-existence.  Function <a class="link" href="functions-sequence.html#FUNC-PG-GET-SEQUENCE-DATA"><code class="function">pg_get_sequence_data()</code></a> allows inspection of sequence synchronization.
+This occurs during <a class="link" href="sql-altersubscription.html" title="ALTER SUBSCRIPTION"><code class="command">ALTER SUBSCRIPTION ... [ADD|SET|REFRESH|DROP] PUBLICATION</code></a>.  Function <a class="link" href="functions-sequence.html#FUNC-PG-GET-SEQUENCE-DATA"><code class="function">pg_get_sequence_data()</code></a> allows inspection of sequence synchronization.
 </p></li><li class="listitem"><p>
 Allow <a class="link" href="sql-createpublication.html" title="CREATE PUBLICATION"><code class="command">CREATE</code></a>/<a class="link" href="sql-alterpublication.html" title="ALTER PUBLICATION"><code class="command">ALTER PUBLICATION</code></a> to publish all sequences (Vignesh C, Tomas Vondra)
 <a class="ulink" href="https://postgr.es/c/96b378497" target="_top">§</a>
@@ -640,7 +662,8 @@ The supported base types are <a class="link" href="datatype-character.html" titl
 Add <a class="link" href="textsearch-dictionaries.html#TEXTSEARCH-SNOWBALL-DICTIONARY" title="12.6.6. Snowball Dictionary">full text stemmers</a> for Polish and Esperanto (Tom Lane)
 <a class="ulink" href="https://postgr.es/c/7dc95cc3b" target="_top">§</a>
 </p><p>
-The Dutch stemmer has also been updated.  The old Dutch stemmer is available via <a class="link" href="textsearch-dictionaries.html#TEXTSEARCH-SNOWBALL-DICTIONARY" title="12.6.6. Snowball Dictionary"><code class="literal">dutch_porter</code></a>.
+The Dutch, English, and German stemmers have also been updated.
+The previous Dutch stemmer is available via <a class="link" href="textsearch-dictionaries.html#TEXTSEARCH-SNOWBALL-DICTIONARY" title="12.6.6. Snowball Dictionary"><code class="literal">dutch_porter</code></a>.
 </p></li><li class="listitem"><p>
 Allow event triggers to be written using <a class="link" href="plpython.html" title="Chapter 44. PL/Python — Python Procedural Language"><span class="application">PL/Python</span></a> (Euler Taveira, Dimitri Fontaine)
 <a class="ulink" href="https://postgr.es/c/53eff471c" target="_top">§</a>
@@ -818,7 +841,7 @@ Add hooks <code class="literal">planner_setup_hook</code>, <code class="literal"
 Allow extensions to replace <a class="link" href="xfunc-sql.html#XFUNC-SQL-FUNCTIONS-RETURNING-SET" title="36.5.9. SQL Functions Returning Sets">set-returning functions</a> in the <code class="literal">FROM</code> clause with <acronym class="acronym">SQL</acronym> queries (Paul A. Jungwirth)
 <a class="ulink" href="https://postgr.es/c/b140c8d7a" target="_top">§</a>
 </p></li><li class="listitem"><p>
-Make <a class="link" href="functions-info.html#FUNCTIONS-INFO-SNAPSHOT" title="9.28.8. Transaction ID and Snapshot Information Functions">multixid members</a> 64-bit (Maxim Orlov)
+Make <a class="link" href="functions-info.html#FUNCTIONS-INFO-SNAPSHOT" title="9.28.8. Transaction ID and Snapshot Information Functions">multixact members</a> 64-bit (Maxim Orlov)
 <a class="ulink" href="https://postgr.es/c/bd8d9c9bd" target="_top">§</a>
 </p></li><li class="listitem"><p>
 Change function prototypes to use <code class="literal">uint*</code> instead of <code class="literal">bit*</code> typedefs (Nathan Bossart)

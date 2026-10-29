@@ -381,8 +381,9 @@ NO_GATHER(<em class="replaceable"><code>advice_target</code></em> [ ... ])
    </p><p>
     <code class="literal">NO_GATHER</code> specifies that no <code class="literal">Gather</code> or
     <code class="literal">Gather Merge</code> node should appear above any of the
-    targets, but it only constrains the planning of an individual subquery,
-    and outer subquery levels can still use parallel query. For example,
+    targets, but it only constrains planning within a given join problem,
+    and parent tables or outer subquery levels can still use parallel query.
+    For example,
     <code class="literal">NO_GATHER(inner_example@any_1)</code> precludes using a
     <code class="literal">Parallel Seq Scan</code> to access the
     <code class="literal">inner_example</code> table within the <code class="literal">any_1</code>
@@ -412,7 +413,13 @@ Aggregate
           -&gt;  Gather
                 -&gt; Parallel Seq Scan on inner_example
                      Filter: (something_else &gt; 100)
-</pre></div></div><div class="sect2" id="PGPLANADVICE-FEEDBACK"><div class="titlepage"><div><div><h3 class="title">F.30.5. Advice Feedback <a href="#PGPLANADVICE-FEEDBACK" class="id_link">#</a></h3></div></div></div><p>
+</pre><p>
+    Similarly, when <code class="literal">NO_GATHER</code> is applied to an individual
+    partition, it precludes a parallel scan of that particular partition, but
+    it is still possible for a <code class="literal">Parallel Append</code> node to use
+    a non-parallel scan of that partition. To rule out that possibility,
+    use <code class="literal">NO_GATHER</code> on the parent rather than on the child.
+   </p></div></div><div class="sect2" id="PGPLANADVICE-FEEDBACK"><div class="titlepage"><div><div><h3 class="title">F.30.5. Advice Feedback <a href="#PGPLANADVICE-FEEDBACK" class="id_link">#</a></h3></div></div></div><p>
    <code class="literal">EXPLAIN</code> provides feedback on whether supplied advice was
    successfully applied to the query in the form of a comment on each piece
    of supplied advice. For example:

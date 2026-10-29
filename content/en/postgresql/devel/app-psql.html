@@ -784,10 +784,13 @@ SELECT $1 \parse stmt1
         This is purely a convenience measure.
         </p><p>
         As with many other commands, if <code class="literal">x</code> is appended to
-        the command name, the results are displayed in expanded mode, but note
-        that this only applies when <code class="command">\d</code> is used without a
-        <em class="replaceable"><code>pattern</code></em> argument, and
-        the <code class="literal">x</code> modifier cannot appear immediately after the
+        the command name, the results are displayed in expanded mode for this
+        command only, but note that this only applies when <code class="command">\d</code>
+        is used without a <em class="replaceable"><code>pattern</code></em>
+        argument or to describe a sequence.
+        The same limitation on expanded output applies to
+        <code class="command">\x on</code> and <code class="command">\x auto</code>.
+        The <code class="literal">x</code> modifier cannot appear immediately after the
         <code class="command">\d</code> (because <code class="command">\dx</code> is a different
         command); the <code class="literal">x</code> modifier may only appear after an
         <code class="literal">S</code> or <code class="literal">+</code> modifier. For example,

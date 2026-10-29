@@ -120,6 +120,13 @@ url = "/postgresql/18/release-18.html"
     This is significant for cases where the role is changed between queue
     time and transaction commit.
     </p></li><li class="listitem"><p>
+      Report <code class="literal">RESTRICT</code> <a class="link" href="sql-createtable.html#SQL-CREATETABLE-PARMS-REFERENCES">foreign key</a>
+      violations with <a class="link" href="errcodes-appendix.html" title="Appendix A. PostgreSQL Error Codes"><code class="literal">SQLSTATE</code></a>
+      <code class="literal">23001</code> (<code class="literal">restrict_violation</code>)
+      instead of <code class="literal">23503</code>
+      (<code class="literal">foreign_key_violation</code>) (Peter Eisentraut)
+      <a class="ulink" href="https://postgr.es/c/086c84b23" target="_top">§</a>
+      </p></li><li class="listitem"><p>
     Remove non-functional support for rule privileges in <a class="xref" href="sql-grant.html" title="GRANT"><span class="refentrytitle">GRANT</span></a>/<a class="xref" href="sql-revoke.html" title="REVOKE"><span class="refentrytitle">REVOKE</span></a> (Fujii Masao)
     <a class="ulink" href="https://postgr.es/c/fefa76f70" target="_top">§</a>
     </p><p>
@@ -747,7 +754,7 @@ url = "/postgresql/18/release-18.html"
       This also adds column <a class="link" href="catalog-pg-constraint.html" title="52.13. pg_constraint"><code class="structname">pg_constraint</code></a>.<code class="structfield">conenforced</code>.
       </p></li><li class="listitem"><p>
       Require <a class="link" href="sql-createtable.html#SQL-CREATETABLE-PARMS-REFERENCES">primary/foreign key</a>
-      relationships to use either deterministic collations or the the
+      relationships to use either deterministic collations or the
       same nondeterministic collations (Peter Eisentraut)
       <a class="ulink" href="https://postgr.es/c/9321d2fdf" target="_top">§</a>
       </p><p>
