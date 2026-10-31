@@ -150,6 +150,19 @@ extension.  When upgrading such databases using pg_upgrade, it is recommended
 to reindex all indexes related to full text search and pg_trgm after the
 upgrade, and to recompute any stored <code class="type">tsvector</code> values.
 </p></li><li class="listitem"><p>
+Change how <a class="xref" href="fuzzystrmatch.html" title="F.16. fuzzystrmatch — determine string similarities and distance">fuzzystrmatch</a> functions handle
+non-<acronym class="acronym">ASCII</acronym> characters (Peter Eisentraut, Jeff Davis)
+<a class="ulink" href="https://postgr.es/c/e39ece034" target="_top">§</a>
+<a class="ulink" href="https://postgr.es/c/b96a9fd76f3" target="_top">§</a>
+</p><p>
+<code class="function">dmetaphone()</code> and <code class="function">dmetaphone_alt()</code>
+now upper-case their input using the database's default collation rather than
+always using libc, and <code class="function">soundex()</code>,
+<code class="function">metaphone()</code>, and <code class="function">difference()</code> now
+treat only <acronym class="acronym">ASCII</acronym> letters as letters.  When upgrading with
+<a class="link" href="pgupgrade.html" title="pg_upgrade"><span class="application">pg_upgrade</span></a>, it is
+recommended to reindex any indexes that use these functions after the upgrade.
+</p></li><li class="listitem"><p>
 Remove <code class="literal">MULE_INTERNAL</code> encoding (Thomas Munro)
 <a class="ulink" href="https://postgr.es/c/77645d44e" target="_top">§</a>
 </p><p>
@@ -662,8 +675,12 @@ The supported base types are <a class="link" href="datatype-character.html" titl
 Add <a class="link" href="textsearch-dictionaries.html#TEXTSEARCH-SNOWBALL-DICTIONARY" title="12.6.6. Snowball Dictionary">full text stemmers</a> for Polish and Esperanto (Tom Lane)
 <a class="ulink" href="https://postgr.es/c/7dc95cc3b" target="_top">§</a>
 </p><p>
-The Dutch, English, and German stemmers have also been updated.
-The previous Dutch stemmer is available via <a class="link" href="textsearch-dictionaries.html#TEXTSEARCH-SNOWBALL-DICTIONARY" title="12.6.6. Snowball Dictionary"><code class="literal">dutch_porter</code></a>.
+The Dutch stemmer now uses a different algorithm, which changes the stems of
+many words; the previous algorithm is available via <a class="link" href="textsearch-dictionaries.html#TEXTSEARCH-SNOWBALL-DICTIONARY" title="12.6.6. Snowball Dictionary"><code class="literal">dutch_porter</code></a>.
+</p><p>
+The English, French, German, Lithuanian, Norwegian, Spanish, Swedish, and
+Turkish stemmers have also been updated and produce different stems for some
+words.
 </p></li><li class="listitem"><p>
 Allow event triggers to be written using <a class="link" href="plpython.html" title="Chapter 44. PL/Python — Python Procedural Language"><span class="application">PL/Python</span></a> (Euler Taveira, Dimitri Fontaine)
 <a class="ulink" href="https://postgr.es/c/53eff471c" target="_top">§</a>
@@ -925,9 +942,6 @@ Improve performance of <a class="xref" href="bloom.html" title="F.6. bloom — 
 Improve performance of <a class="xref" href="pgstattuple.html" title="F.35. pgstattuple — obtain tuple-level statistics">pgstattuple</a> by using streaming reads (Xuneng Zhou)
 <a class="ulink" href="https://postgr.es/c/213f0079b" target="_top">§</a>
 <a class="ulink" href="https://postgr.es/c/ae58189a4" target="_top">§</a>
-</p></li><li class="listitem"><p>
-Allow <a class="xref" href="fuzzystrmatch.html" title="F.16. fuzzystrmatch — determine string similarities and distance">fuzzystrmatch</a>'s <code class="function">dmetaphone()</code> to use single-byte encodings beyond <acronym class="acronym">ASCII</acronym> (Peter Eisentraut)
-<a class="ulink" href="https://postgr.es/c/e39ece034" target="_top">§</a>
 </p></li><li class="listitem"><p>
 Modify <a class="link" href="oid2name.html" title="oid2name"><span class="application">oid2name</span></a> <code class="option">--extended</code> to report the relation file path (David Bidoc)
 <a class="ulink" href="https://postgr.es/c/3c5ec35de" target="_top">§</a>
