@@ -50,6 +50,8 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Build website
+        env:
+          HUGO_SERVICES_GOOGLEANALYTICS_ID: ${{ vars.GA_MEASUREMENT_ID }}
         run: hugo --cleanDestinationDir --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
 
       - name: Commit and push updated manuals

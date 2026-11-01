@@ -72,3 +72,9 @@ After updating, commit `content/en/`, `content/zh/`, `data/manual_nav/`, `static
 `.github/workflows/pages.yml` runs `make refresh`, `make sync-pgdoc`, and a Hugo build every day at **00:00 UTC**. After a successful build, it pushes changed manual snapshots, assets, navigation data, and source-commit records to the branch that triggered the workflow, then deploys to GitHub Pages. It skips the commit when nothing has changed. You can also trigger it manually from the Actions tab. The workflow sets Hugo's `baseURL` to the URL provided by GitHub Pages. For the first deployment, set **Settings → Pages → Build and deployment → Source** to **GitHub Actions** and allow the workflow's `GITHUB_TOKEN` to write to the repository.
 
 You can also publish `public/` to another static host. For Netlify, see `netlify.toml`: use this repository as the site root, `make build` as the build command, and `public` as the publish directory.
+
+## Google Analytics
+
+The shared page template now includes Hugo's built-in GA4 template. For GitHub Pages builds, set `GA_MEASUREMENT_ID` (in the form `G-...`) under **Settings → Secrets and variables → Actions → Variables**. No analytics code is emitted when the variable is unset. A GA4 measurement ID is visible in the generated page source, so a regular repository variable is sufficient.
+
+For a local build, supply the ID temporarily, for example `HUGO_SERVICES_GOOGLEANALYTICS_ID=G-XXXXXXXXXX .build/hugo --minify`. After deployment, verify it with Google Tag Assistant or the GA4 Realtime report.

@@ -72,3 +72,9 @@ make import-postgres VERSION=18 HTML_DIR=/absolute/path/to/html
 `.github/workflows/pages.yml` 每天 **00:00 UTC** 执行 `make refresh`、`make sync-pgdoc` 和 Hugo 构建；构建成功后将变化的文档快照、资源、目录和来源提交记录推送到触发 workflow 的分支，再发布到 GitHub Pages。没有文档变化时跳过提交。也可在 Actions 页面手动触发。workflow 使用 GitHub Pages 提供的站点地址设置 Hugo `baseURL`。首次使用时，在仓库 **Settings → Pages → Build and deployment → Source** 中选择 **GitHub Actions**；运行时需要允许 `GITHUB_TOKEN` 写入仓库。
 
 也可以将 `public/` 发布到其他静态托管平台。Netlify 配置见 `netlify.toml`：站点根目录为本仓库，构建命令为 `make build`，发布目录为 `public`。
+
+## Google Analytics
+
+站点已在公共页面模板中接入 Hugo 自带的 GA4 模板。GitHub Pages 构建从仓库 **Settings → Secrets and variables → Actions → Variables** 中读取 `GA_MEASUREMENT_ID`（格式为 `G-...`）；未设置时不输出统计代码。GA4 衡量 ID 会出现在网页源码中，因此使用普通变量即可。
+
+本地构建可临时指定 ID，例如 `HUGO_SERVICES_GOOGLEANALYTICS_ID=G-XXXXXXXXXX .build/hugo --minify`。部署后可用 Google Tag Assistant 或 GA4 实时报告验证。

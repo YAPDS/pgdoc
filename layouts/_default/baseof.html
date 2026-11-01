@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="{{ "css/docbook.css" | relURL }}">
   <link rel="canonical" href="{{ .Permalink }}">
   {{ range .AllTranslations }}<link rel="alternate" hreflang="{{ .Language.LanguageCode }}" href="{{ .Permalink }}">{{ end }}
+  {{ template "_internal/google_analytics.html" . }}
 </head>
 <body>
   <header class="site-header">
