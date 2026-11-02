@@ -41,7 +41,7 @@ last started with</td></tr><tr><td><code class="filename">postmaster.pid</code><
   Unix-domain socket directory path (could be empty),
   first valid listen_address (IP address or <code class="literal">*</code>, or empty if
   not listening on TCP),
-  and shared memory segment ID
+  and shared memory segment key and ID
   (this file is not present after server shutdown)</td></tr></tbody></table></div></div><br class="table-break" /><p>
 For each database in the cluster there is a subdirectory within
 <code class="varname">PGDATA</code><code class="filename">/base</code>, named after the database's OID in
