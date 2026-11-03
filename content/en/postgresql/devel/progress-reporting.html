@@ -590,20 +590,26 @@ url = "/postgresql/devel/progress-reporting.html"
        Number of indexes rebuilt.  This counter only advances when the phase
        is <code class="literal">rebuilding index</code>.
       </p></td></tr></tbody></table></div></div><br class="table-break" /><div class="table" id="REPACK-PHASES"><p class="title"><strong>Table 27.50. REPACK Phases</strong></p><div class="table-contents"><table class="table" summary="REPACK Phases" border="1"><colgroup><col class="col1" /><col class="col2" /></colgroup><thead><tr><th>Phase</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">initializing</code></td><td>
-       The command is preparing to begin scanning the heap.  This phase is
-       expected to be very brief, except for
-       <code class="command">REPACK CONCURRENTLY</code>, where it also covers enabling
-       logical decoding and then initializing it.  Enabling has nothing to do
-       if <a class="xref" href="runtime-config-preset.html#GUC-EFFECTIVE-WAL-LEVEL">effective_wal_level</a> is already
-       <code class="literal">logical</code>; otherwise it waits for all processes to
-       acknowledge that they started writing the additional WAL information
-       that logical decoding requires.  Initializing then waits for the
-       transactions that have been assigned a transaction ID to end, including
-       ones that started while this wait was in progress, so this phase can
-       last longer than the longest transaction running when the command
-       started.  This includes any other
+       The command is performing initial setup.  For
+       <code class="command">REPACK CONCURRENTLY</code>, this includes starting the
+       logical decoding worker.  This phase is expected to be very brief.
+     </td></tr><tr><td><code class="literal">enabling logical decoding</code></td><td>
+       <code class="command">REPACK CONCURRENTLY</code> is enabling logical decoding.
+       This has nothing to do if <a class="xref" href="runtime-config-preset.html#GUC-EFFECTIVE-WAL-LEVEL">effective_wal_level</a> is
+       already <code class="literal">logical</code>; otherwise it waits for all processes
+       to acknowledge that they started writing the additional WAL information
+       that logical decoding requires.
+       This phase is skipped when not in concurrent mode.
+     </td></tr><tr><td><code class="literal">initializing logical decoding</code></td><td>
+       <code class="command">REPACK CONCURRENTLY</code> is initializing logical
+       decoding and obtaining the initial snapshot used to copy the table.
+       This waits for the transactions that have been assigned a transaction ID
+       to end, including ones that started while this wait was in progress, so
+       this phase can last longer than the longest transaction running when the
+       command started.  This includes any other
        <code class="command">REPACK CONCURRENTLY</code>, which holds a transaction ID
        until it finishes.
+       This phase is skipped when not in concurrent mode.
      </td></tr><tr><td><code class="literal">seq scanning heap</code></td><td>
        The command is currently scanning the table using a sequential scan.
      </td></tr><tr><td><code class="literal">index scanning heap</code></td><td>

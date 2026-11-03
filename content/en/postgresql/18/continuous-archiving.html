@@ -314,6 +314,11 @@ test ! -f /mnt/server/archivedir/00000001000000A900000065 &amp;&amp; cp pg_wal/0
     only the blocks which have been changed since the earlier backup and enough
     metadata to reconstruct the current version of the file.
    </p><p>
+    The prior backup may be on an earlier timeline in the server's history,
+    but must not require WAL beyond the point where the server switched
+    away from that timeline. Otherwise, choose another prior backup or
+    take a new full backup.
+   </p><p>
     To figure out which blocks need to be backed up, the server uses WAL
     summaries, which are stored in the data directory, inside the directory
     <code class="literal">pg_wal/summaries</code>. If the required summary files are not

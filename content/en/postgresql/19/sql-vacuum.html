@@ -285,8 +285,11 @@ VACUUM [ ( <em class="replaceable"><code>option</code></em> [, ...] ) ] [ <em cl
     <code class="command">VACUUM</code> causes a substantial increase in I/O traffic,
     which might cause poor performance for other active sessions.  Therefore,
     it is sometimes advisable to use the cost-based vacuum delay feature.  For
-    parallel vacuum, each worker sleeps in proportion to the work done by that
-    worker.  See <a class="xref" href="runtime-config-vacuum.html#RUNTIME-CONFIG-RESOURCE-VACUUM-COST" title="19.10.2. Cost-based Vacuum Delay">Section 19.10.2</a> for
+    parallel vacuum, the leader and its parallel workers use the same cost
+    delay but share the cost limit. Each of them sleeps in proportion to the
+    work it has done, and sleeps longer when more of them are working at the
+    same time.
+    See <a class="xref" href="runtime-config-vacuum.html#RUNTIME-CONFIG-RESOURCE-VACUUM-COST" title="19.10.2. Cost-based Vacuum Delay">Section 19.10.2</a> for
     details.
    </p><p>
     Each backend running <code class="command">VACUUM</code> without the

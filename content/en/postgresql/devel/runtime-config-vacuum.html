@@ -340,7 +340,16 @@ url = "/postgresql/devel/runtime-config-vacuum.html"
        delay is calculated as <code class="varname">vacuum_cost_delay</code> *
        <code class="varname">accumulated_balance</code> /
        <code class="varname">vacuum_cost_limit</code> with a maximum of
-       <code class="varname">vacuum_cost_delay</code> * 4.
+       <code class="varname">vacuum_cost_delay</code> * 4 for a non-parallel vacuum.
+       For <a class="xref" href="routine-vacuuming.html#PARALLEL-VACUUM" title="24.1.7. Parallel Vacuum">Parallel Vacuum</a>, each process
+       uses a share of the limit, so the delay is calculated as
+       <code class="varname">vacuum_cost_delay</code> *
+       <code class="varname">accumulated_balance</code> *
+       <code class="varname">active_processes</code> /
+       <code class="varname">vacuum_cost_limit</code> with a maximum of
+       <code class="varname">vacuum_cost_delay</code> * 4 *
+       <code class="varname">active_processes</code>, and never more than one second
+       at once.
       </p></div></div><div class="sect2" id="RUNTIME-CONFIG-VACUUM-DEFAULT"><div class="titlepage"><div><div><h3 class="title">19.10.3. Default Behavior <a href="#RUNTIME-CONFIG-VACUUM-DEFAULT" class="id_link">#</a></h3></div></div></div><div class="variablelist"><dl class="variablelist"><dt id="GUC-VACUUM-TRUNCATE"><span class="term"><code class="varname">vacuum_truncate</code> (<code class="type">boolean</code>)
        <a id="id-1.6.6.13.6.2.1.1.3" class="indexterm"></a>
        </span> <a href="#GUC-VACUUM-TRUNCATE" class="id_link">#</a></dt><dd><p>
