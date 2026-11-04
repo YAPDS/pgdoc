@@ -358,11 +358,11 @@ CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
     The function <code class="function">ts_stat</code> is useful for checking your
     configuration and for finding stop-word candidates.
    </p><pre class="synopsis">
-ts_stat(<em class="replaceable"><code>sqlquery</code></em> <code class="type">text</code>, [<span class="optional"> <em class="replaceable"><code>weights</code></em> <code class="type">text</code>, </span>]
+ts_stat(<em class="replaceable"><code>query</code></em> <code class="type">text</code>, [<span class="optional"> <em class="replaceable"><code>weights</code></em> <code class="type">text</code>, </span>]
         OUT <em class="replaceable"><code>word</code></em> <code class="type">text</code>, OUT <em class="replaceable"><code>ndoc</code></em> <code class="type">integer</code>,
         OUT <em class="replaceable"><code>nentry</code></em> <code class="type">integer</code>) returns <code class="type">setof record</code>
 </pre><p>
-    <em class="replaceable"><code>sqlquery</code></em> is a text value containing an SQL
+    <em class="replaceable"><code>query</code></em> is a text value containing an SQL
     query which must return a single <code class="type">tsvector</code> column.
     <code class="function">ts_stat</code> executes the query and returns statistics about
     each distinct lexeme (word) contained in the <code class="type">tsvector</code>

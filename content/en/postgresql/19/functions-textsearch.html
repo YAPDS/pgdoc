@@ -677,13 +677,13 @@ url = "/postgresql/19/functions-textsearch.html"
        </p></td></tr><tr><td class="func_table_entry"><p class="func_signature">
         <a id="id-1.5.8.19.10.2.2.3.1.1.1" class="indexterm"></a>
         <code class="function">ts_parse</code> ( <em class="parameter"><code>parser_name</code></em> <code class="type">text</code>,
-        <em class="parameter"><code>document</code></em> <code class="type">text</code> )
+        <em class="parameter"><code>txt</code></em> <code class="type">text</code> )
         → <code class="returnvalue">setof record</code>
         ( <em class="parameter"><code>tokid</code></em> <code class="type">integer</code>,
         <em class="parameter"><code>token</code></em> <code class="type">text</code> )
        </p>
        <p>
-        Extracts tokens from the <em class="parameter"><code>document</code></em> using the
+        Extracts tokens from the document <em class="parameter"><code>txt</code></em> using the
         named parser.
         See <a class="xref" href="textsearch-debugging.html#TEXTSEARCH-PARSER-TESTING" title="12.8.2. Parser Testing">Section 12.8.2</a> for details.
        </p>
@@ -692,13 +692,13 @@ url = "/postgresql/19/functions-textsearch.html"
         → <code class="returnvalue">(1,foo) ...</code>
        </p></td></tr><tr><td class="func_table_entry"><p class="func_signature">
         <code class="function">ts_parse</code> ( <em class="parameter"><code>parser_oid</code></em> <code class="type">oid</code>,
-        <em class="parameter"><code>document</code></em> <code class="type">text</code> )
+        <em class="parameter"><code>txt</code></em> <code class="type">text</code> )
         → <code class="returnvalue">setof record</code>
         ( <em class="parameter"><code>tokid</code></em> <code class="type">integer</code>,
         <em class="parameter"><code>token</code></em> <code class="type">text</code> )
        </p>
        <p>
-        Extracts tokens from the <em class="parameter"><code>document</code></em> using a
+        Extracts tokens from the document <em class="parameter"><code>txt</code></em> using a
         parser specified by OID.
         See <a class="xref" href="textsearch-debugging.html#TEXTSEARCH-PARSER-TESTING" title="12.8.2. Parser Testing">Section 12.8.2</a> for details.
        </p>
@@ -738,7 +738,7 @@ url = "/postgresql/19/functions-textsearch.html"
         → <code class="returnvalue">(1,asciiword,"Word, all ASCII") ...</code>
        </p></td></tr><tr><td class="func_table_entry"><p class="func_signature">
         <a id="id-1.5.8.19.10.2.2.7.1.1.1" class="indexterm"></a>
-        <code class="function">ts_stat</code> ( <em class="parameter"><code>sqlquery</code></em> <code class="type">text</code>
+        <code class="function">ts_stat</code> ( <em class="parameter"><code>query</code></em> <code class="type">text</code>
         [<span class="optional">, <em class="parameter"><code>weights</code></em> <code class="type">text</code> </span>] )
         → <code class="returnvalue">setof record</code>
         ( <em class="parameter"><code>word</code></em> <code class="type">text</code>,
@@ -746,7 +746,7 @@ url = "/postgresql/19/functions-textsearch.html"
         <em class="parameter"><code>nentry</code></em> <code class="type">integer</code> )
        </p>
        <p>
-        Executes the <em class="parameter"><code>sqlquery</code></em>, which must return a
+        Executes the <em class="parameter"><code>query</code></em>, which must return a
         single <code class="type">tsvector</code> column, and returns statistics about each
         distinct lexeme contained in the data.
         See <a class="xref" href="textsearch-features.html#TEXTSEARCH-STATISTICS" title="12.4.4. Gathering Document Statistics">Section 12.4.4</a> for details.

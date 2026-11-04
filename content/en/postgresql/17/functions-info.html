@@ -1611,8 +1611,8 @@ SELECT currval(pg_get_serial_sequence('sometable', 'id'));
        </p></td></tr><tr><td class="func_table_entry"><p class="func_signature">
         <a id="id-1.5.8.33.9.3.2.2.2.1.1.1" class="indexterm"></a>
         <code class="function">pg_input_error_info</code> (
-          <em class="parameter"><code>string</code></em> <code class="type">text</code>,
-          <em class="parameter"><code>type</code></em> <code class="type">text</code>
+          <em class="parameter"><code>value</code></em> <code class="type">text</code>,
+          <em class="parameter"><code>type_name</code></em> <code class="type">text</code>
         )
         → <code class="returnvalue">record</code>
         ( <em class="parameter"><code>message</code></em> <code class="type">text</code>,
@@ -1621,7 +1621,7 @@ SELECT currval(pg_get_serial_sequence('sometable', 'id'));
         <em class="parameter"><code>sql_error_code</code></em> <code class="type">text</code> )
        </p>
        <p>
-        Tests whether the given <em class="parameter"><code>string</code></em> is valid
+        Tests whether the given <em class="parameter"><code>value</code></em> is valid
         input for the specified data type; if not, return the details of
         the error that would have been thrown.  If the input is valid, the
         results are NULL.  The inputs are the same as

@@ -559,13 +559,13 @@ url = "/postgresql/18/functions-string.html"
         → <code class="returnvalue">900150983cd24fb0​d6963f7d28e17f72</code>
        </p></td></tr><tr><td class="func_table_entry"><p class="func_signature">
         <a id="id-1.5.8.10.7.2.2.12.1.1.1" class="indexterm"></a>
-        <code class="function">parse_ident</code> ( <em class="parameter"><code>qualified_identifier</code></em> <code class="type">text</code>
-        [<span class="optional">, <em class="parameter"><code>strict_mode</code></em> <code class="type">boolean</code> <code class="literal">DEFAULT</code> <code class="literal">true</code> </span>] )
+        <code class="function">parse_ident</code> ( <em class="parameter"><code>str</code></em> <code class="type">text</code>
+        [<span class="optional">, <em class="parameter"><code>strict</code></em> <code class="type">boolean</code> <code class="literal">DEFAULT</code> <code class="literal">true</code> </span>] )
         → <code class="returnvalue">text[]</code>
        </p>
        <p>
-        Splits <em class="parameter"><code>qualified_identifier</code></em> into an array of
-        identifiers, removing any quoting of individual identifiers.  By
+        Splits the qualified identifier <em class="parameter"><code>str</code></em> into an
+        array of identifiers, removing any quoting of individual identifiers.  By
         default, extra characters after the last identifier are considered an
         error; but if the second parameter is <code class="literal">false</code>, then such
         extra characters are ignored. (This behavior is useful for parsing

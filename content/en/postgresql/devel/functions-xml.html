@@ -701,7 +701,7 @@ SELECT xmltable.*
     The following functions map the contents of relational tables to
     XML values.  They can be thought of as XML export functionality:
 </p><pre class="synopsis">
-<code class="function">table_to_xml</code> ( <em class="parameter"><code>table</code></em> <code class="type">regclass</code>, <em class="parameter"><code>nulls</code></em> <code class="type">boolean</code>,
+<code class="function">table_to_xml</code> ( <em class="parameter"><code>tbl</code></em> <code class="type">regclass</code>, <em class="parameter"><code>nulls</code></em> <code class="type">boolean</code>,
                <em class="parameter"><code>tableforest</code></em> <code class="type">boolean</code>, <em class="parameter"><code>targetns</code></em> <code class="type">text</code> ) → <code class="returnvalue">xml</code>
 <code class="function">query_to_xml</code> ( <em class="parameter"><code>query</code></em> <code class="type">text</code>, <em class="parameter"><code>nulls</code></em> <code class="type">boolean</code>,
                <em class="parameter"><code>tableforest</code></em> <code class="type">boolean</code>, <em class="parameter"><code>targetns</code></em> <code class="type">text</code> ) → <code class="returnvalue">xml</code>
@@ -710,7 +710,7 @@ SELECT xmltable.*
 </pre><p>
    </p><p>
     <code class="function">table_to_xml</code> maps the content of the named
-    table, passed as parameter <em class="parameter"><code>table</code></em>.  The
+    table, passed as parameter <em class="parameter"><code>tbl</code></em>.  The
     <code class="type">regclass</code> type accepts strings identifying tables using the
     usual notation, including optional schema qualification and
     double quotes (see <a class="xref" href="datatype-oid.html" title="8.19. Object Identifier Types">Section 8.19</a> for details).
@@ -789,7 +789,7 @@ SELECT xmltable.*
     The following functions return XML Schema documents describing the
     mappings performed by the corresponding functions above:
 </p><pre class="synopsis">
-<code class="function">table_to_xmlschema</code> ( <em class="parameter"><code>table</code></em> <code class="type">regclass</code>, <em class="parameter"><code>nulls</code></em> <code class="type">boolean</code>,
+<code class="function">table_to_xmlschema</code> ( <em class="parameter"><code>tbl</code></em> <code class="type">regclass</code>, <em class="parameter"><code>nulls</code></em> <code class="type">boolean</code>,
                      <em class="parameter"><code>tableforest</code></em> <code class="type">boolean</code>, <em class="parameter"><code>targetns</code></em> <code class="type">text</code> ) → <code class="returnvalue">xml</code>
 <code class="function">query_to_xmlschema</code> ( <em class="parameter"><code>query</code></em> <code class="type">text</code>, <em class="parameter"><code>nulls</code></em> <code class="type">boolean</code>,
                      <em class="parameter"><code>tableforest</code></em> <code class="type">boolean</code>, <em class="parameter"><code>targetns</code></em> <code class="type">text</code> ) → <code class="returnvalue">xml</code>
@@ -804,7 +804,7 @@ SELECT xmltable.*
     together.  They can be useful where self-contained and
     self-describing results are wanted:
 </p><pre class="synopsis">
-<code class="function">table_to_xml_and_xmlschema</code> ( <em class="parameter"><code>table</code></em> <code class="type">regclass</code>, <em class="parameter"><code>nulls</code></em> <code class="type">boolean</code>,
+<code class="function">table_to_xml_and_xmlschema</code> ( <em class="parameter"><code>tbl</code></em> <code class="type">regclass</code>, <em class="parameter"><code>nulls</code></em> <code class="type">boolean</code>,
                              <em class="parameter"><code>tableforest</code></em> <code class="type">boolean</code>, <em class="parameter"><code>targetns</code></em> <code class="type">text</code> ) → <code class="returnvalue">xml</code>
 <code class="function">query_to_xml_and_xmlschema</code> ( <em class="parameter"><code>query</code></em> <code class="type">text</code>, <em class="parameter"><code>nulls</code></em> <code class="type">boolean</code>,
                              <em class="parameter"><code>tableforest</code></em> <code class="type">boolean</code>, <em class="parameter"><code>targetns</code></em> <code class="type">text</code> ) → <code class="returnvalue">xml</code>

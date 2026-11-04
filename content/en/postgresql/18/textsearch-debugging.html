@@ -147,12 +147,12 @@ FROM ts_debug('public.english', 'The Brightest supernovaes');
   </p></div><div class="sect2" id="TEXTSEARCH-PARSER-TESTING"><div class="titlepage"><div><div><h3 class="title">12.8.2. Parser Testing <a href="#TEXTSEARCH-PARSER-TESTING" class="id_link">#</a></h3></div></div></div><p>
    The following functions allow direct testing of a text search parser.
   </p><a id="id-1.5.11.11.4.3" class="indexterm"></a><pre class="synopsis">
-ts_parse(<em class="replaceable"><code>parser_name</code></em> <code class="type">text</code>, <em class="replaceable"><code>document</code></em> <code class="type">text</code>,
+ts_parse(<em class="replaceable"><code>parser_name</code></em> <code class="type">text</code>, <em class="replaceable"><code>txt</code></em> <code class="type">text</code>,
          OUT <em class="replaceable"><code>tokid</code></em> <code class="type">integer</code>, OUT <em class="replaceable"><code>token</code></em> <code class="type">text</code>) returns <code class="type">setof record</code>
-ts_parse(<em class="replaceable"><code>parser_oid</code></em> <code class="type">oid</code>, <em class="replaceable"><code>document</code></em> <code class="type">text</code>,
+ts_parse(<em class="replaceable"><code>parser_oid</code></em> <code class="type">oid</code>, <em class="replaceable"><code>txt</code></em> <code class="type">text</code>,
          OUT <em class="replaceable"><code>tokid</code></em> <code class="type">integer</code>, OUT <em class="replaceable"><code>token</code></em> <code class="type">text</code>) returns <code class="type">setof record</code>
 </pre><p>
-   <code class="function">ts_parse</code> parses the given <em class="replaceable"><code>document</code></em>
+   <code class="function">ts_parse</code> parses the document <em class="replaceable"><code>txt</code></em>
    and returns a series of records, one for each token produced by
    parsing. Each record includes a <code class="varname">tokid</code> showing the
    assigned token type and a <code class="varname">token</code> which is the text of the

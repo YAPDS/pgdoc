@@ -494,10 +494,7 @@ url = "/postgresql/devel/runtime-config-vacuum.html"
         potential downside of wasted eager freezes of pages that are modified
         again before the next aggressive vacuum.
        </p><p>
-        This parameter can only be set in the
-        <code class="filename">postgresql.conf</code> file or on the server command
-        line; but the setting can be overridden for individual tables by
-        changing the
+        The setting can be overridden for individual tables by changing the
         <a class="link" href="sql-createtable.html#RELOPTION-VACUUM-MAX-EAGER-FREEZE-FAILURE-RATE">
         corresponding table storage parameter</a>.
         For more information on tuning vacuum's freezing behavior,

@@ -1081,19 +1081,19 @@ ERROR:  value too long for type character(2)
 </pre><p>
        </p></td></tr><tr><td class="func_table_entry"><p class="func_signature">
         <a id="id-1.5.8.23.8.13.2.2.14.1.1.1" class="indexterm"></a>
-        <code class="function">jsonb_set</code> ( <em class="parameter"><code>target</code></em> <code class="type">jsonb</code>, <em class="parameter"><code>path</code></em> <code class="type">text[]</code>, <em class="parameter"><code>new_value</code></em> <code class="type">jsonb</code> [<span class="optional">, <em class="parameter"><code>create_if_missing</code></em> <code class="type">boolean</code> </span>] )
+        <code class="function">jsonb_set</code> ( <em class="parameter"><code>jsonb_in</code></em> <code class="type">jsonb</code>, <em class="parameter"><code>path</code></em> <code class="type">text[]</code>, <em class="parameter"><code>replacement</code></em> <code class="type">jsonb</code> [<span class="optional">, <em class="parameter"><code>create_if_missing</code></em> <code class="type">boolean</code> </span>] )
         → <code class="returnvalue">jsonb</code>
        </p>
        <p>
-        Returns <em class="parameter"><code>target</code></em>
+        Returns <em class="parameter"><code>jsonb_in</code></em>
         with the item designated by <em class="parameter"><code>path</code></em>
-        replaced by <em class="parameter"><code>new_value</code></em>, or with
-        <em class="parameter"><code>new_value</code></em> added if
+        replaced by <em class="parameter"><code>replacement</code></em>, or with
+        <em class="parameter"><code>replacement</code></em> added if
         <em class="parameter"><code>create_if_missing</code></em> is true (which is the
         default) and the item designated by <em class="parameter"><code>path</code></em>
         does not exist.
         All earlier steps in the path must exist, or
-        the <em class="parameter"><code>target</code></em> is returned unchanged.
+        the <em class="parameter"><code>jsonb_in</code></em> is returned unchanged.
         As with the path oriented operators, negative integers that
         appear in the <em class="parameter"><code>path</code></em> count from the end
         of JSON arrays.
@@ -1111,11 +1111,11 @@ ERROR:  value too long for type character(2)
         → <code class="returnvalue">[{"f1": 1, "f2": null, "f3": [2, 3, 4]}, 2]</code>
        </p></td></tr><tr><td class="func_table_entry"><p class="func_signature">
         <a id="id-1.5.8.23.8.13.2.2.15.1.1.1" class="indexterm"></a>
-        <code class="function">jsonb_set_lax</code> ( <em class="parameter"><code>target</code></em> <code class="type">jsonb</code>, <em class="parameter"><code>path</code></em> <code class="type">text[]</code>, <em class="parameter"><code>new_value</code></em> <code class="type">jsonb</code> [<span class="optional">, <em class="parameter"><code>create_if_missing</code></em> <code class="type">boolean</code> [<span class="optional">, <em class="parameter"><code>null_value_treatment</code></em> <code class="type">text</code> </span>]</span>] )
+        <code class="function">jsonb_set_lax</code> ( <em class="parameter"><code>jsonb_in</code></em> <code class="type">jsonb</code>, <em class="parameter"><code>path</code></em> <code class="type">text[]</code>, <em class="parameter"><code>replacement</code></em> <code class="type">jsonb</code> [<span class="optional">, <em class="parameter"><code>create_if_missing</code></em> <code class="type">boolean</code> [<span class="optional">, <em class="parameter"><code>null_value_treatment</code></em> <code class="type">text</code> </span>]</span>] )
         → <code class="returnvalue">jsonb</code>
        </p>
        <p>
-        If <em class="parameter"><code>new_value</code></em> is not <code class="literal">NULL</code>,
+        If <em class="parameter"><code>replacement</code></em> is not <code class="literal">NULL</code>,
         behaves identically to <code class="literal">jsonb_set</code>. Otherwise behaves
         according to the value
         of <em class="parameter"><code>null_value_treatment</code></em> which must be one
@@ -1133,22 +1133,22 @@ ERROR:  value too long for type character(2)
         → <code class="returnvalue">[{"f1": 99, "f2": null}, 2]</code>
        </p></td></tr><tr><td class="func_table_entry"><p class="func_signature">
         <a id="id-1.5.8.23.8.13.2.2.16.1.1.1" class="indexterm"></a>
-        <code class="function">jsonb_insert</code> ( <em class="parameter"><code>target</code></em> <code class="type">jsonb</code>, <em class="parameter"><code>path</code></em> <code class="type">text[]</code>, <em class="parameter"><code>new_value</code></em> <code class="type">jsonb</code> [<span class="optional">, <em class="parameter"><code>insert_after</code></em> <code class="type">boolean</code> </span>] )
+        <code class="function">jsonb_insert</code> ( <em class="parameter"><code>jsonb_in</code></em> <code class="type">jsonb</code>, <em class="parameter"><code>path</code></em> <code class="type">text[]</code>, <em class="parameter"><code>replacement</code></em> <code class="type">jsonb</code> [<span class="optional">, <em class="parameter"><code>insert_after</code></em> <code class="type">boolean</code> </span>] )
         → <code class="returnvalue">jsonb</code>
        </p>
        <p>
-        Returns <em class="parameter"><code>target</code></em>
-        with <em class="parameter"><code>new_value</code></em> inserted.  If the item
+        Returns <em class="parameter"><code>jsonb_in</code></em>
+        with <em class="parameter"><code>replacement</code></em> inserted.  If the item
         designated by the <em class="parameter"><code>path</code></em> is an array
-        element, <em class="parameter"><code>new_value</code></em> will be inserted before
+        element, <em class="parameter"><code>replacement</code></em> will be inserted before
         that item if <em class="parameter"><code>insert_after</code></em> is false (which
         is the default), or after it
         if <em class="parameter"><code>insert_after</code></em> is true.  If the item
         designated by the <em class="parameter"><code>path</code></em> is an object
-        field, <em class="parameter"><code>new_value</code></em> will be inserted only if
+        field, <em class="parameter"><code>replacement</code></em> will be inserted only if
         the object does not already contain that key.
         All earlier steps in the path must exist, or
-        the <em class="parameter"><code>target</code></em> is returned unchanged.
+        the <em class="parameter"><code>jsonb_in</code></em> is returned unchanged.
         As with the path oriented operators, negative integers that
         appear in the <em class="parameter"><code>path</code></em> count from the end
         of JSON arrays.

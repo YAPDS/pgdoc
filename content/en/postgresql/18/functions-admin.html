@@ -943,11 +943,11 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
         flushed to disk or not.
        </p></td></tr><tr><td id="PG-LOGICAL-EMIT-MESSAGE" class="func_table_entry"><p class="func_signature">
         <a id="id-1.5.8.34.8.5.2.2.22.1.1.1" class="indexterm"></a>
-        <code class="function">pg_logical_emit_message</code> ( <em class="parameter"><code>transactional</code></em> <code class="type">boolean</code>, <em class="parameter"><code>prefix</code></em> <code class="type">text</code>, <em class="parameter"><code>content</code></em> <code class="type">text</code> [<span class="optional">, <em class="parameter"><code>flush</code></em> <code class="type">boolean</code> <code class="literal">DEFAULT</code> <code class="literal">false</code></span>] )
+        <code class="function">pg_logical_emit_message</code> ( <em class="parameter"><code>transactional</code></em> <code class="type">boolean</code>, <em class="parameter"><code>prefix</code></em> <code class="type">text</code>, <em class="parameter"><code>message</code></em> <code class="type">text</code> [<span class="optional">, <em class="parameter"><code>flush</code></em> <code class="type">boolean</code> <code class="literal">DEFAULT</code> <code class="literal">false</code></span>] )
         → <code class="returnvalue">pg_lsn</code>
        </p>
        <p class="func_signature">
-        <code class="function">pg_logical_emit_message</code> ( <em class="parameter"><code>transactional</code></em> <code class="type">boolean</code>, <em class="parameter"><code>prefix</code></em> <code class="type">text</code>, <em class="parameter"><code>content</code></em> <code class="type">bytea</code> [<span class="optional">, <em class="parameter"><code>flush</code></em> <code class="type">boolean</code> <code class="literal">DEFAULT</code> <code class="literal">false</code></span>] )
+        <code class="function">pg_logical_emit_message</code> ( <em class="parameter"><code>transactional</code></em> <code class="type">boolean</code>, <em class="parameter"><code>prefix</code></em> <code class="type">text</code>, <em class="parameter"><code>message</code></em> <code class="type">bytea</code> [<span class="optional">, <em class="parameter"><code>flush</code></em> <code class="type">boolean</code> <code class="literal">DEFAULT</code> <code class="literal">false</code></span>] )
         → <code class="returnvalue">pg_lsn</code>
        </p>
        <p>
@@ -959,7 +959,7 @@ postgres=# SELECT '0/0'::pg_lsn + pd.segment_number * ps.setting::int + :offset 
         reads the record. The <em class="parameter"><code>prefix</code></em> parameter is a
         textual prefix that can be used by logical decoding plugins to easily
         recognize messages that are interesting for them.
-        The <em class="parameter"><code>content</code></em> parameter is the content of the
+        The <em class="parameter"><code>message</code></em> parameter is the content of the
         message, given either in text or binary form.
         The <em class="parameter"><code>flush</code></em> parameter (default set to
         <code class="literal">false</code>) controls if the message is immediately
