@@ -87,6 +87,8 @@ url = "/postgresql/devel/runtime-config-replication.html"
          restriction. The default is <code class="literal">'pgoutput, test_decoding'</code>,
          which are the two logical output plugins included in the standard
          <span class="productname">PostgreSQL</span> distribution.
+         (<a class="xref" href="runtime-config-replication.html#GUC-OUTPUT-PLUGIN-LIBRARIES-BUILTINS" title="Table 19.2. Plugins Allowed by Default">Table 19.2</a> documents the
+         behavior of the system if they are removed from this list.)
         </p><p>
          The format is a comma-separated list of library names, where each name
          is interpreted as for the <a class="link" href="sql-load.html" title="LOAD"><code class="command">LOAD</code></a>
@@ -118,7 +120,21 @@ ERROR:  library "..." may not be used as an output plugin
 DETAIL:  The configuration parameter "output_plugin_libraries" (currently 'pgoutput, test_decoding') does not name this library as a trusted output plugin.
 HINT:  If it is safe for all REPLICATION users to use this library as an output plugin, add it to "output_plugin_libraries" and reload the server configuration.
 </pre><p>
-         </p></div></dd><dt id="GUC-WAL-KEEP-SIZE"><span class="term"><code class="varname">wal_keep_size</code> (<code class="type">integer</code>)
+         </p></div><div class="table" id="GUC-OUTPUT-PLUGIN-LIBRARIES-BUILTINS"><p class="title"><strong>Table 19.2. Plugins Allowed by Default</strong></p><div class="table-contents"><table class="table" summary="Plugins Allowed by Default" border="1"><colgroup><col class="col1" /><col class="col2" /></colgroup><thead><tr><th>Plugin</th><th>Description</th></tr></thead><tbody><tr><td><a class="xref" href="logicaldecoding-output-plugin.html#LOGICALDECODING-PGOUTPUT" title="47.6.1. pgoutput — Standard Logical Decoding Output Plugin">pgoutput</a></td><td>
+             Core plugin for logical replication. Removing <code class="literal">pgoutput</code>
+             from <code class="literal">output_plugin_libraries</code> will cause future
+             subscription connections, and maintenance of the replication slots
+             for subscriptions, to fail with an error. (Beware that existing
+             replication tools may not degrade gracefully if the server is
+             configured in this way.)
+            </td></tr><tr><td><a class="xref" href="test-decoding.html" title="F.47. test_decoding — SQL-based test/example module for WAL logical decoding">test_decoding</a></td><td>
+             Decodes the WAL stream into a human-readable text representation.
+             <a class="xref" href="app-pgrecvlogical.html" title="pg_recvlogical"><span class="refentrytitle"><span class="application">pg_recvlogical</span></span></a> uses this plugin by default, so
+             removing it from <code class="literal">output_plugin_libraries</code> will
+             prevent the use of that utility unless a replacement plugin is
+             installed and explicitly selected with
+             <a class="link" href="app-pgrecvlogical.html#APP-PGRECVLOGICAL-OPTION-PLUGIN"><code class="literal">--plugin</code></a>.
+            </td></tr></tbody></table></div></div><br class="table-break" /></dd><dt id="GUC-WAL-KEEP-SIZE"><span class="term"><code class="varname">wal_keep_size</code> (<code class="type">integer</code>)
        <a id="id-1.6.6.9.5.3.5.1.3" class="indexterm"></a>
        </span> <a href="#GUC-WAL-KEEP-SIZE" class="id_link">#</a></dt><dd><p>
         Specifies the minimum size of past WAL files kept in the

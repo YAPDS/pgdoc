@@ -557,7 +557,7 @@ pgbench [<span class="optional"> <em class="replaceable"><code>options</code></e
    explained above, or by the meta commands explained below.
    In addition to any variables preset by <code class="option">-D</code> command-line options,
    there are a few variables that are preset automatically, listed in
-   <a class="xref" href="pgbench.html#PGBENCH-AUTOMATIC-VARIABLES" title="Table 298. pgbench Automatic Variables">Table 298</a>. A value specified for these
+   <a class="xref" href="pgbench.html#PGBENCH-AUTOMATIC-VARIABLES" title="Table 299. pgbench Automatic Variables">Table 299</a>. A value specified for these
    variables using <code class="option">-D</code> takes precedence over the automatic presets.
    Once set, a variable's
    value can be inserted into an SQL command by writing
@@ -565,7 +565,7 @@ pgbench [<span class="optional"> <em class="replaceable"><code>options</code></e
    one client session, each session has its own set of variables.
    <span class="application">pgbench</span> supports up to 255 variable uses in one
    statement.
-  </p><div class="table" id="PGBENCH-AUTOMATIC-VARIABLES"><p class="title"><strong>Table 298. pgbench Automatic Variables</strong></p><div class="table-contents"><table class="table" summary="pgbench Automatic Variables" border="1"><colgroup><col class="col1" /><col class="col2" /></colgroup><thead><tr><th>Variable</th><th>Description</th></tr></thead><tbody><tr><td> <code class="literal">client_id</code> </td><td>unique number identifying the client session (starts from zero)</td></tr><tr><td> <code class="literal">default_seed</code> </td><td>seed used in hash and pseudorandom permutation functions by default</td></tr><tr><td> <code class="literal">random_seed</code> </td><td>random generator seed (unless overwritten with <code class="option">-D</code>)</td></tr><tr><td> <code class="literal">scale</code> </td><td>current scale factor</td></tr></tbody></table></div></div><br class="table-break" /><p>
+  </p><div class="table" id="PGBENCH-AUTOMATIC-VARIABLES"><p class="title"><strong>Table 299. pgbench Automatic Variables</strong></p><div class="table-contents"><table class="table" summary="pgbench Automatic Variables" border="1"><colgroup><col class="col1" /><col class="col2" /></colgroup><thead><tr><th>Variable</th><th>Description</th></tr></thead><tbody><tr><td> <code class="literal">client_id</code> </td><td>unique number identifying the client session (starts from zero)</td></tr><tr><td> <code class="literal">default_seed</code> </td><td>seed used in hash and pseudorandom permutation functions by default</td></tr><tr><td> <code class="literal">random_seed</code> </td><td>random generator seed (unless overwritten with <code class="option">-D</code>)</td></tr><tr><td> <code class="literal">scale</code> </td><td>current scale factor</td></tr></tbody></table></div></div><br class="table-break" /><p>
    Script file meta commands begin with a backslash (<code class="literal">\</code>) and
    normally extend to the end of the line, although they can be continued
    to additional lines by writing backslash-return.
@@ -703,14 +703,14 @@ SELECT 4 AS four \; SELECT 5 AS five \aset
         Pipeline mode requires the use of extended query protocol.
      </p></dd></dl></div></div><div class="refsect2" id="PGBENCH-BUILTIN-OPERATORS"><h3>Built-in Operators</h3><p>
    The arithmetic, bitwise, comparison and logical operators listed in
-   <a class="xref" href="pgbench.html#PGBENCH-OPERATORS" title="Table 299. pgbench Operators">Table 299</a> are built into <span class="application">pgbench</span>
+   <a class="xref" href="pgbench.html#PGBENCH-OPERATORS" title="Table 300. pgbench Operators">Table 300</a> are built into <span class="application">pgbench</span>
    and may be used in expressions appearing in
    <a class="link" href="pgbench.html#PGBENCH-METACOMMAND-SET"><code class="literal">\set</code></a>.
    The operators are listed in increasing precedence order.
    Except as noted, operators taking two numeric inputs will produce
    a double value if either input is double, otherwise they produce
    an integer result.
-  </p><div class="table" id="PGBENCH-OPERATORS"><p class="title"><strong>Table 299. pgbench Operators</strong></p><div class="table-contents"><table class="table" summary="pgbench Operators" border="1"><colgroup><col /></colgroup><thead><tr><th class="func_table_entry"><p class="func_signature">
+  </p><div class="table" id="PGBENCH-OPERATORS"><p class="title"><strong>Table 300. pgbench Operators</strong></p><div class="table-contents"><table class="table" summary="pgbench Operators" border="1"><colgroup><col /></colgroup><thead><tr><th class="func_table_entry"><p class="func_signature">
         Operator
        </p>
        <p>
@@ -959,10 +959,10 @@ SELECT 4 AS four \; SELECT 5 AS five \aset
         <code class="literal">- 2.0</code>
         → <code class="returnvalue">-2.0</code>
        </p></td></tr></tbody></table></div></div><br class="table-break" /></div><div class="refsect2" id="PGBENCH-BUILTIN-FUNCTIONS"><h3>Built-In Functions</h3><p>
-   The functions listed in <a class="xref" href="pgbench.html#PGBENCH-FUNCTIONS" title="Table 300. pgbench Functions">Table 300</a> are built
+   The functions listed in <a class="xref" href="pgbench.html#PGBENCH-FUNCTIONS" title="Table 301. pgbench Functions">Table 301</a> are built
    into <span class="application">pgbench</span> and may be used in expressions appearing in
    <a class="link" href="pgbench.html#PGBENCH-METACOMMAND-SET"><code class="literal">\set</code></a>.
-  </p><div class="table" id="PGBENCH-FUNCTIONS"><p class="title"><strong>Table 300. pgbench Functions</strong></p><div class="table-contents"><table class="table" summary="pgbench Functions" border="1"><colgroup><col /></colgroup><thead><tr><th class="func_table_entry"><p class="func_signature">
+  </p><div class="table" id="PGBENCH-FUNCTIONS"><p class="title"><strong>Table 301. pgbench Functions</strong></p><div class="table-contents"><table class="table" summary="pgbench Functions" border="1"><colgroup><col /></colgroup><thead><tr><th class="func_table_entry"><p class="func_signature">
         Function
        </p>
        <p>
