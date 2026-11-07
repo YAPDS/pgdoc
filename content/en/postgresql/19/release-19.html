@@ -117,6 +117,12 @@ Change <a class="link" href="jit.html" title="Chapter 30. Just-in-Time Compila
 Previously <acronym class="acronym">JIT</acronym> was enabled by default, and activated based on optimizer costs, but this costing has been determined to be unreliable.  This change requires sites that are doing many
 large analytical queries to manually enable <acronym class="acronym">JIT</acronym>.
 </p></li><li class="listitem"><p>
+Change <a class="link" href="routine-vacuuming.html#PARALLEL-VACUUM" title="24.1.7. Parallel Vacuum">parallel vacuum</a> leaders and workers to share the cost-based vacuum delay limit (Bharath Rupireddy)
+<a class="ulink" href="https://postgr.es/c/8628df889" target="_top">§</a>
+</p><p>
+Previously each worker process slept based only on the cost it incurred itself, so a parallel vacuum could consume several times the budget set by <a class="link" href="runtime-config-vacuum.html#GUC-VACUUM-COST-LIMIT"><code class="varname">vacuum_cost_limit</code></a>.
+With this change, <a class="link" href="sql-vacuum.html" title="VACUUM"><code class="command">VACUUM</code></a> with parallel workers and cost-based delay enabled might run slower than in previous releases.
+</p></li><li class="listitem"><p>
 Rename column <code class="structfield">sync_error_count</code> to <code class="structfield">sync_table_error_count</code> in system view <a class="link" href="monitoring-stats.html#PG-STAT-SUBSCRIPTION-STATS" title="Table 27.20. pg_stat_subscription_stats View"><code class="structname">pg_stat_subscription_stats</code></a> (Vignesh C)
 <a class="ulink" href="https://postgr.es/c/3edaf29fa" target="_top">§</a>
 </p><p>
@@ -137,17 +143,18 @@ Remove optimizer hook get_relation_info_hook and add better-placed hook build_si
 Change <a class="link" href="app-psql.html" title="psql"><span class="application">psql</span></a>'s <code class="literal">\crosstabview</code> command to honor the <code class="literal">\pset null</code> setting (Chao Li)
 <a class="ulink" href="https://postgr.es/c/4df5fe383" target="_top">§</a>
 </p></li><li class="listitem"><p>
-Change <a class="link" href="textsearch.html" title="Chapter 12. Full Text Search">full text search</a> and <a class="xref" href="pgtrgm.html" title="F.37. pg_trgm — support for similarity of text using trigram matching">pg_trgm</a> to use the database's locale provider for character
-classification when parsing text (Jeff Davis) <a class="ulink" href="https://postgr.es/c/e113f9c102b" target="_top">§</a>
+Change <a class="link" href="textsearch.html" title="Chapter 12. Full Text Search">full text search</a> and <span class="application"><a class="xref" href="pgtrgm.html" title="F.37. pg_trgm — support for similarity of text using trigram matching">pg_trgm</a></span> to use the database's locale provider for character
+classification when parsing text (Jeff Davis)
+<a class="ulink" href="https://postgr.es/c/e113f9c102b" target="_top">§</a>
 </p><p>
 Previously, characters were classified using libc, regardless of the locale
-provider.  In databases with a locale provider other than libc (that is, ICU
-or builtin) and where the locale configured through that locale provider
-behaves differently from the LC_CTYPE setting configured for the database
-(particularly if LC_CTYPE is the C locale), this could cause changes in
-behavior of some functions related to full text search as well as the pg_trgm
-extension.  When upgrading such databases using pg_upgrade, it is recommended
-to reindex all indexes related to full text search and pg_trgm after the
+provider.  In databases with a locale provider other than libc (e.g., <code class="literal">ICU</code>,
+<code class="literal">builtin</code>) and where the locale configured through that locale provider
+behaves differently from the <code class="literal">LC_CTYPE</code> setting configured for the database,
+particularly a LC_CTYPE of <code class="literal">C</code>, the
+output of some full text search and <span class="application">pg_trgm</span> functions could change.
+When upgrading such databases using <a class="link" href="pgupgrade.html" title="pg_upgrade"><span class="application">pg_upgrade</span></a>, it is recommended
+to reindex all indexes which use full text search and <span class="application">pg_trgm</span> after the
 upgrade, and to recompute any stored <code class="type">tsvector</code> values.
 </p></li><li class="listitem"><p>
 Change how <a class="xref" href="fuzzystrmatch.html" title="F.16. fuzzystrmatch — determine string similarities and distance">fuzzystrmatch</a> functions handle
@@ -319,6 +326,7 @@ Add system view <a class="link" href="monitoring-stats.html#PG-STAT-RECOVERY-VIE
 <a class="ulink" href="https://postgr.es/c/2d4ead6f4" target="_top">§</a>
 </p></li><li class="listitem"><p>
 Add system view <a class="link" href="progress-reporting.html#PG-STAT-PROGRESS-REPACK-VIEW" title="Table 27.48. pg_stat_progress_repack View"><code class="structname">pg_stat_progress_repack</code></a> to report the progress of <code class="command">REPACK</code>, <code class="command">CLUSTER</code>, and <code class="command">VACUUM FULL</code> (Álvaro Herrera)
+<a class="ulink" href="https://postgr.es/c/ac58465e0" target="_top">§</a>
 </p></li><li class="listitem"><p>
 Add system view <a class="link" href="monitoring-stats.html#PG-STAT-AUTOVACUUM-SCORES-VIEW" title="Table 27.32. pg_stat_autovacuum_scores View"><code class="structname">pg_stat_autovacuum_scores</code></a> to report per-table <a class="link" href="routine-vacuuming.html#AUTOVACUUM" title="24.1.6. The Autovacuum Daemon">autovacuum</a> details (Sami Imseih)
 <a class="ulink" href="https://postgr.es/c/87f61f0c8" target="_top">§</a>

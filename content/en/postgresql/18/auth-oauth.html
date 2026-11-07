@@ -73,7 +73,9 @@ url = "/postgresql/18/auth-oauth.html"
     <a class="ulink" href="https://datatracker.ietf.org/doc/html/rfc6750" target="_top">RFC 6750</a>,
     which are a type of access token used with OAuth 2.0 where the token is an
     opaque string.  The format of the access token is implementation specific
-    and is chosen by each authorization server.
+    and is chosen by each authorization server.  The bearer token is sent
+    in clear-text, and is vulnerable to network sniffing.  For this reason
+    OAuth should only be used over SSL connections.
    </p><p>
     The following configuration options are supported for OAuth:
     </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">issuer</code></span></dt><dd><p>

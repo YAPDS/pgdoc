@@ -369,7 +369,9 @@ include_dir         <em class="replaceable"><code>directory</code></em>
           operating system. See <a class="xref" href="auth-bsd.html" title="20.14. BSD Authentication">Section 20.14</a> for details.
          </p></dd><dt><span class="term"><code class="literal">oauth</code></span></dt><dd><p>
           Authorize and optionally authenticate using a third-party OAuth 2.0
-          identity provider. See <a class="xref" href="auth-oauth.html" title="20.15. OAuth Authorization/Authentication">Section 20.15</a> for details.
+          identity provider.  Since the bearer token is sent in clear text over
+          the network, this should not be used on untrusted networks.  See
+          <a class="xref" href="auth-oauth.html" title="20.15. OAuth Authorization/Authentication">Section 20.15</a> for details.
          </p></dd></dl></div><p>
 
       </p></dd><dt><span class="term"><em class="replaceable"><code>auth-options</code></em></span></dt><dd><p>

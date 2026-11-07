@@ -131,12 +131,18 @@ url = "/postgresql/18/sasl-authentication.html"
     the GS2 header, and the <code class="structfield">host</code> and
     <code class="structfield">port</code> keys) which are currently ignored by the
     server.
-   </p><p>
+   </p><div class="note"><h3 class="title">Note</h3><p>
+     The bearer token is sent across the connection, as part of the client
+     initial response, and grants access to the database like a clear-text
+     password. On an unencrypted connection it can be captured by network
+     sniffing. For this reason <code class="literal">OAUTHBEARER</code> should only be
+     used over SSL connections.
+    </p></div><p>
     <code class="literal">OAUTHBEARER</code> does not support channel binding, and there
     is no "OAUTHBEARER-PLUS" mechanism. This mechanism does not make use of
     server data during a successful authentication, so the
     AuthenticationSASLFinal message is not used in the exchange.
-   </p><div class="procedure" id="id-1.10.6.8.6.6"><p class="title"><strong>Example</strong></p><ol class="procedure" type="1"><li class="step"><p>
+   </p><div class="procedure" id="id-1.10.6.8.6.7"><p class="title"><strong>Example</strong></p><ol class="procedure" type="1"><li class="step"><p>
       During the first exchange, the server sends an AuthenticationSASL message
       with the <code class="literal">OAUTHBEARER</code> mechanism advertised.
      </p></li><li class="step"><p>
