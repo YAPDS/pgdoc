@@ -12,7 +12,8 @@ from . import import_pgdoc
 VERSIONS = ("devel", "19", "18", "17")
 
 
-def sync_all(source: Path, refresh: bool = False, postgres_source: Path = None):
+def sync_all(source: Path, refresh: bool = False, postgres_source: Path = None,
+             postgres_remote: str = import_pgdoc.POSTGRES_REMOTE):
     branch = subprocess.run(
         ["git", "-C", str(source), "branch", "--show-current"],
         capture_output=True, text=True, check=True,
@@ -25,6 +26,7 @@ def sync_all(source: Path, refresh: bool = False, postgres_source: Path = None):
     ).stdout.strip()
     revisions = (json.loads(import_pgdoc.REVISIONS.read_text(encoding="utf-8"))
                  if import_pgdoc.REVISIONS.is_file() else {})
+    changed = []
     for version in VERSIONS:
         site = import_pgdoc.SITE
         cached = all((site / path).is_file() for path in (
@@ -35,8 +37,17 @@ def sync_all(source: Path, refresh: bool = False, postgres_source: Path = None):
         if not refresh and cached and revisions.get(version) == revision:
             print(f"Using imported pgdoc {version} manual from {revision[:12]}", flush=True)
             continue
-        print(f"Importing pgdoc {version} manual from {revision[:12]}", flush=True)
-        import_pgdoc.import_pgdoc(source, version, postgres_source=postgres_source)
+        changed.append(version)
+    if not changed:
+        return
+    with TemporaryDirectory(prefix="pgdoc-postgres-") as temporary:
+        if postgres_source is None:
+            postgres_source = Path(temporary) / "postgres"
+            commits = import_pgdoc.recorded_postgres_commits(changed)
+            import_pgdoc.fetch_postgres_commits(postgres_remote, postgres_source, commits)
+        for version in changed:
+            print(f"Importing pgdoc {version} manual from {revision[:12]}", flush=True)
+            import_pgdoc.import_pgdoc(source, version, postgres_source=postgres_source)
 
 
 def main():
@@ -46,16 +57,18 @@ def main():
     source_options.add_argument("--remote", default=import_pgdoc.REMOTE, help="pgdoc Git remote")
     parser.add_argument("--refresh", action="store_true", help="rebuild even if the revision is unchanged")
     parser.add_argument("--postgres-source", type=Path, help="local PostgreSQL Git checkout")
+    parser.add_argument("--postgres-remote", default=import_pgdoc.POSTGRES_REMOTE,
+                        help="PostgreSQL Git remote for automatic source fetch")
     args = parser.parse_args()
     try:
         postgres_source = args.postgres_source.resolve() if args.postgres_source else None
         if args.source:
-            sync_all(args.source.resolve(), args.refresh, postgres_source)
+            sync_all(args.source.resolve(), args.refresh, postgres_source, args.postgres_remote)
         else:
             with TemporaryDirectory(prefix="pgdoc-main-") as temporary:
                 source = Path(temporary) / "pgdoc"
                 import_pgdoc.fetch_pgdoc(args.remote, source)
-                sync_all(source, args.refresh, postgres_source)
+                sync_all(source, args.refresh, postgres_source, args.postgres_remote)
     except (FileNotFoundError, RuntimeError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Chinese manual sync failed: {error}\n")
 

@@ -14,6 +14,29 @@ from .import_postgres_html import SITE, VERSION, import_docs
 REVISIONS = SITE / "data" / "manual-sources-zh.json"
 REMOTE = "https://github.com/pgsty/pgdoc.git"
 BRANCH = "main"
+POSTGRES_REMOTE = "https://github.com/postgres/postgres.git"
+
+
+def recorded_postgres_commits(versions):
+    revisions = SITE / "data" / "manual-sources.json"
+    recorded = json.loads(revisions.read_text(encoding="utf-8")) if revisions.is_file() else {}
+    commits = {version: recorded.get(version) for version in versions}
+    missing = [version for version, commit in commits.items() if not commit]
+    if missing:
+        raise ValueError(f"PostgreSQL source commit is required for {', '.join(missing)}")
+    return commits
+
+
+def fetch_postgres_commits(remote: str, destination: Path, commits):
+    """Fetch only the PostgreSQL revisions needed by the Chinese manuals."""
+    subprocess.run(["git", "init", "--quiet", str(destination)], check=True)
+    subprocess.run(["git", "-C", str(destination), "remote", "add", "origin", remote], check=True)
+    for version, commit in commits.items():
+        subprocess.run(
+            ["git", "-C", str(destination), "fetch", "--quiet", "--no-tags", "--depth", "1",
+             "origin", f"+{commit}:refs/heads/pgdoc-{version}"],
+            check=True,
+        )
 
 
 def fetch_pgdoc(remote: str, destination: Path):
@@ -61,11 +84,7 @@ def import_pgdoc(source: Path, version: str, html_dir: Path = None,
             build_env = os.environ.copy()
             if postgres_source:
                 if not postgres_commit:
-                    revisions = SITE / "data" / "manual-sources.json"
-                    recorded = json.loads(revisions.read_text(encoding="utf-8")) if revisions.is_file() else {}
-                    postgres_commit = recorded.get(version)
-                if not postgres_commit:
-                    raise ValueError(f"PostgreSQL source commit is required for {version}")
+                    postgres_commit = recorded_postgres_commits((version,))[version]
                 staged_postgres = Path(temporary) / "postgres"
                 subprocess.run(
                     ["git", "clone", "--shared", "--no-checkout", "--quiet",
@@ -107,19 +126,23 @@ def main():
     parser.add_argument("--html-dir", type=Path, help="already built chunked HTML directory")
     parser.add_argument("--postgres-source", type=Path, help="local PostgreSQL Git checkout for offline build")
     parser.add_argument("--postgres-commit", help="pinned PostgreSQL commit (defaults to this site's recorded revision)")
+    parser.add_argument("--postgres-remote", default=POSTGRES_REMOTE, help="PostgreSQL Git remote for automatic source fetch")
     args = parser.parse_args()
     try:
         html_dir = args.html_dir.resolve() if args.html_dir else None
         postgres_source = args.postgres_source.resolve() if args.postgres_source else None
-        if args.source:
-            import_pgdoc(args.source.resolve(), args.version, html_dir,
-                         postgres_source, args.postgres_commit)
-        else:
-            with TemporaryDirectory(prefix="pgdoc-main-") as temporary:
+        with TemporaryDirectory(prefix="pgdoc-import-") as temporary:
+            if args.source:
+                source = args.source.resolve()
+            else:
                 source = Path(temporary) / "pgdoc"
                 fetch_pgdoc(args.remote, source)
-                import_pgdoc(source, args.version, html_dir,
-                             postgres_source, args.postgres_commit)
+            commit = args.postgres_commit
+            if html_dir is None and postgres_source is None:
+                commit = commit or recorded_postgres_commits((args.version,))[args.version]
+                postgres_source = Path(temporary) / "postgres"
+                fetch_postgres_commits(args.postgres_remote, postgres_source, {args.version: commit})
+            import_pgdoc(source, args.version, html_dir, postgres_source, commit)
     except (FileNotFoundError, RuntimeError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Chinese manual import failed: {error}\n")
 

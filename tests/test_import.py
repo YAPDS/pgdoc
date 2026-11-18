@@ -2,6 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from subprocess import CompletedProcess
+import subprocess
 from unittest.mock import patch
 
 from scripts import import_pgdoc, import_postgres_html, sync_pgdoc, sync_postgres, sync_versions
@@ -117,9 +118,59 @@ class ImportTests(unittest.TestCase):
                   patch.object(sync_pgdoc.import_pgdoc, "import_pgdoc") as importer):
                 sync_pgdoc.sync_all(root)
                 importer.assert_not_called()
-                sync_pgdoc.sync_all(root, refresh=True)
+                sync_pgdoc.sync_all(root, refresh=True, postgres_source=root)
                 self.assertEqual([call.args[1] for call in importer.call_args_list],
                                  list(sync_pgdoc.VERSIONS))
+
+    def test_pgdoc_fetches_recorded_postgres_commit_for_build(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            upstream = root / "upstream"
+            upstream.mkdir()
+            subprocess.run(["git", "init", "--quiet", str(upstream)], check=True)
+            (upstream / "configure.ac").write_text("PostgreSQL source", encoding="utf-8")
+            subprocess.run(["git", "-C", str(upstream), "add", "configure.ac"], check=True)
+            subprocess.run(["git", "-C", str(upstream), "-c", "user.name=Test",
+                            "-c", "user.email=test@example.com", "commit", "--quiet", "-m", "source"], check=True)
+            commit = subprocess.run(["git", "-C", str(upstream), "rev-parse", "HEAD"],
+                                    capture_output=True, text=True, check=True).stdout.strip()
+            destination = root / "fetched"
+            import_pgdoc.fetch_postgres_commits(str(upstream), destination, {"devel": commit})
+            staged = root / "staged"
+            subprocess.run(["git", "clone", "--shared", "--no-checkout", "--quiet",
+                            str(destination), str(staged)], check=True)
+            subprocess.run(["git", "-C", str(staged), "checkout", "--detach", "--quiet", commit], check=True)
+            self.assertEqual((staged / "configure.ac").read_text(encoding="utf-8"), "PostgreSQL source")
+
+    def test_pgdoc_sync_fetches_only_needed_postgres_commits(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "data").mkdir()
+            (root / "data/manual-sources.json").write_text('{"devel":"pinned"}', encoding="utf-8")
+            revisions = root / "data/manual-sources-zh.json"
+            revisions.write_text('{"19":"latest","18":"latest","17":"latest"}', encoding="utf-8")
+            for version in ("19", "18", "17"):
+                for path in (f"content/zh/postgresql/{version}/_index.html",
+                             f"data/manual_nav/zh/{version}.json",
+                             f"static/zh/manual-nav/{version}.json"):
+                    target = root / path
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_text("cached", encoding="utf-8")
+
+            def git(command, **kwargs):
+                value = "main" if "branch" in command else "latest"
+                return CompletedProcess(command, 0, value + "\n", "")
+
+            with (patch.object(sync_pgdoc.import_pgdoc, "SITE", root),
+                  patch.object(sync_pgdoc.import_pgdoc, "REVISIONS", revisions),
+                  patch.object(sync_pgdoc.subprocess, "run", side_effect=git),
+                  patch.object(sync_pgdoc.import_pgdoc, "fetch_postgres_commits") as fetch,
+                  patch.object(sync_pgdoc.import_pgdoc, "import_pgdoc") as importer):
+                sync_pgdoc.sync_all(root, postgres_remote="local-mirror")
+                self.assertEqual(fetch.call_args.args[0], "local-mirror")
+                self.assertEqual(fetch.call_args.args[2], {"devel": "pinned"})
+                self.assertEqual(importer.call_args.args[1], "devel")
+                self.assertEqual(importer.call_args.kwargs["postgres_source"], fetch.call_args.args[1])
 
     def test_pgdoc_build_stages_read_only_source(self):
         with tempfile.TemporaryDirectory() as temporary:

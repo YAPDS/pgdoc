@@ -17,7 +17,7 @@
 
 - Hugo **0.144.2**：用于生成和预览站点；可以安装到 `PATH`，也可以将可执行文件放在 `.build/hugo`。
 - Python 3、Git、GNU Make：用于拉取和导入文档。
-- 构建上游文档时还需要 C 编译器、Bison、Flex、`xmllint`、`xsltproc`、DocBook XML/XSL 和 `rsync`。同步命令需要访问相应的 Git 远端，pgdoc 构建可能还会下载 PostgreSQL 上游归档。
+- 构建上游文档时还需要 C 编译器、Bison、Flex、`xmllint`、`xsltproc`、DocBook XML/XSL 和 `rsync`。同步命令需要访问相应的 Git 远端；中文构建会按本站记录的提交自动拉取 PostgreSQL 源码。
 
 Debian/Ubuntu 可安装文档构建依赖：
 
@@ -63,7 +63,7 @@ make import-pgdoc VERSION=18     # 单独导入中文 18
 make import-postgres VERSION=18 HTML_DIR=/absolute/path/to/html
 ```
 
-`VERSION=devel` 对应 pgdoc 的 `zh/20/`。中文导入可用 `PGDOC_DIR=/absolute/path/to/pgdoc` 指定已检出 `main` 的本地仓库；该目录需自行更新。已有中文分章节 HTML 时，可在 `make import-pgdoc` 中传入 `HTML_DIR=/absolute/path/to/html` 跳过 pgdoc 构建。若 pgdoc 无法下载其 PostgreSQL 源码归档，可传入包含相应提交的本地仓库 `PG_SOURCE=/absolute/path/to/postgres`；单版本导入还可用 `PG_COMMIT` 指定提交，否则读取本站记录的英文来源提交。
+`VERSION=devel` 对应 pgdoc 的 `zh/20/`。中文导入可用 `PGDOC_DIR=/absolute/path/to/pgdoc` 指定已检出 `main` 的本地仓库；该目录需自行更新。已有中文分章节 HTML 时，可在 `make import-pgdoc` 中传入 `HTML_DIR=/absolute/path/to/html` 跳过 pgdoc 构建。默认从 `PG_REMOTE` 拉取本站记录的英文来源提交供 pgdoc 构建，无需准备 pgdoc 的源码归档。离线构建可传入包含相应提交的本地仓库 `PG_SOURCE=/absolute/path/to/postgres`；单版本导入还可用 `PG_COMMIT` 指定提交。
 
 更新后将 `content/en/`、`content/zh/`、`data/manual_nav/`、`static/manual-nav/`、`static/postgresql/`、`static/zh/postgresql/` 及两份来源提交记录一起提交。手册页面由脚本生成，应在上游修改源文档后重新导入。
 
