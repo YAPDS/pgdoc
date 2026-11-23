@@ -142,6 +142,24 @@ class ImportTests(unittest.TestCase):
             subprocess.run(["git", "-C", str(staged), "checkout", "--detach", "--quiet", commit], check=True)
             self.assertEqual((staged / "configure.ac").read_text(encoding="utf-8"), "PostgreSQL source")
 
+    def test_pgdoc_uses_pg20_translation_baseline_after_english_refresh(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            makefile = root / "zh/20/Makefile"
+            makefile.parent.mkdir(parents=True)
+            makefile.write_text(
+                f"PGDOC_SOURCE_SHA256 ?= {import_pgdoc.PG20_ARCHIVE_SHA256}\n", encoding="utf-8",
+            )
+            (root / "data").mkdir()
+            (root / "data/manual-sources.json").write_text(
+                '{"devel":"new-english-commit","18":"release-commit"}', encoding="utf-8",
+            )
+            with patch.object(import_pgdoc, "SITE", root):
+                self.assertEqual(
+                    import_pgdoc.postgres_commits_for_pgdoc(root, ("devel", "18")),
+                    {"devel": import_pgdoc.PG20_BASELINE_COMMIT, "18": "release-commit"},
+                )
+
     def test_pgdoc_sync_fetches_only_needed_postgres_commits(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

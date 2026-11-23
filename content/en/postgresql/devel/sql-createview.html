@@ -242,15 +242,20 @@ CREATE VIEW vista AS SELECT text 'Hello World' AS hello;
     condition, the condition restricts which rows of the base relation are
     available to be modified by <code class="command">UPDATE</code>,
     <code class="command">DELETE</code>, and <code class="command">MERGE</code>
-    statements on the view.  However, an <code class="command">UPDATE</code> or
-    <code class="command">MERGE</code> is allowed to
+    statements on the view.  Likewise, an <code class="command">INSERT</code> with an
+    <code class="literal">ON CONFLICT DO SELECT</code> or <code class="literal">ON CONFLICT DO
+    UPDATE</code> clause may only act on a conflicting base-relation row
+    that is visible through the view: if the row does not satisfy the
+    <code class="literal">WHERE</code> condition, or that of any view that the view is
+    defined on, an error is raised.  However, an <code class="command">UPDATE</code>,
+    <code class="command">MERGE</code>, or <code class="command">INSERT</code> with an
+    <code class="literal">ON CONFLICT DO UPDATE</code> clause is allowed to
     change a row so that it no longer satisfies the <code class="literal">WHERE</code>
     condition, and thus is no longer visible through the view.  Similarly,
     an <code class="command">INSERT</code> or <code class="command">MERGE</code> command can
     potentially insert base-relation rows
     that do not satisfy the <code class="literal">WHERE</code> condition and thus are not
-    visible through the view (<code class="literal">ON CONFLICT DO SELECT/UPDATE</code> may
-    similarly affect an existing row not visible through the view).
+    visible through the view.
     The <code class="literal">CHECK OPTION</code> may be used to prevent
     <code class="command">INSERT</code>, <code class="command">UPDATE</code>, and
     <code class="command">MERGE</code> commands from creating such rows that are not

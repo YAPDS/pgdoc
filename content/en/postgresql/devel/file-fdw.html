@@ -58,7 +58,10 @@ url = "/postgresql/devel/file-fdw.html"
     </p></dd><dt><span class="term"><code class="literal">reject_limit</code></span></dt><dd><p>
      Specifies the maximum number of errors tolerated while converting a column's
      input value to its data type, the same as <code class="command">COPY</code>'s
-    <code class="literal">REJECT_LIMIT</code> option.
+     <code class="literal">REJECT_LIMIT</code> option.
+     This limit is not enforced when <code class="command">ANALYZE</code> samples rows
+     from the foreign table, so that statistics can still be collected
+     from valid rows.
     </p></dd><dt><span class="term"><code class="literal">log_verbosity</code></span></dt><dd><p>
      Specifies the amount of messages emitted by <code class="literal">file_fdw</code>,
      the same as <code class="command">COPY</code>'s <code class="literal">LOG_VERBOSITY</code> option.

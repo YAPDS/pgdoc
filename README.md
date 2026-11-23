@@ -63,7 +63,7 @@ make import-pgdoc VERSION=18     # 单独导入中文 18
 make import-postgres VERSION=18 HTML_DIR=/absolute/path/to/html
 ```
 
-`VERSION=devel` 对应 pgdoc 的 `zh/20/`。中文导入可用 `PGDOC_DIR=/absolute/path/to/pgdoc` 指定已检出 `main` 的本地仓库；该目录需自行更新。已有中文分章节 HTML 时，可在 `make import-pgdoc` 中传入 `HTML_DIR=/absolute/path/to/html` 跳过 pgdoc 构建。默认从 `PG_REMOTE` 拉取本站记录的英文来源提交供 pgdoc 构建，无需准备 pgdoc 的源码归档。离线构建可传入包含相应提交的本地仓库 `PG_SOURCE=/absolute/path/to/postgres`；单版本导入还可用 `PG_COMMIT` 指定提交。
+`VERSION=devel` 对应 pgdoc 的 `zh/20/`。中文导入可用 `PGDOC_DIR=/absolute/path/to/pgdoc` 指定已检出 `main` 的本地仓库；该目录需自行更新。已有中文分章节 HTML 时，可在 `make import-pgdoc` 中传入 `HTML_DIR=/absolute/path/to/html` 跳过 pgdoc 构建。默认从 `PG_REMOTE` 拉取 PostgreSQL 提交供 pgdoc 构建，无需准备源码归档。当 pgdoc 的 PG20 Makefile 指定 2026-10-16 的归档时，中文 `devel` 使用该归档对应的 PostgreSQL 提交。其他版本默认使用本站记录的英文来源提交。离线构建可传入包含相应提交的本地仓库 `PG_SOURCE=/absolute/path/to/postgres`；单版本导入还可用 `PG_COMMIT` 指定提交。
 
 更新后将 `content/en/`、`content/zh/`、`data/manual_nav/`、`static/manual-nav/`、`static/postgresql/`、`static/zh/postgresql/` 及两份来源提交记录一起提交。手册页面由脚本生成，应在上游修改源文档后重新导入。
 

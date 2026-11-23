@@ -75,7 +75,11 @@ PREPARE TRANSACTION <em class="replaceable"><code>transaction_id</code></em>
     continues to hold whatever locks it held.  The intended usage of the
     feature is that a prepared transaction will normally be committed or
     rolled back as soon as an external transaction manager has verified that
-    other databases are also prepared to commit.
+    other databases are also prepared to commit.  A transaction prepared by a
+    logical replication apply worker is normally completed by the
+    subscription's apply worker; see
+    <a class="xref" href="sql-createsubscription.html#SQL-CREATESUBSCRIPTION-PARAMS-WITH-TWO-PHASE"><code class="literal">two_phase</code> (<code class="type">boolean</code>)</a> for a
+    lock wait this can cause.
    </p><p>
     If you have not set up an external transaction manager to track prepared
     transactions and ensure they get closed out promptly, it is best to keep

@@ -30,11 +30,14 @@ url = "/postgresql/devel/functions-logical.html"
 
     <acronym class="acronym">SQL</acronym> uses a three-valued logic system with true,
     false, and <code class="literal">null</code>, which represents <span class="quote">“<span class="quote">unknown</span>”</span>.
-    Observe the following truth tables:
+    In the truth tables below, the left operand of a binary operator selects
+    the row, and the right operand the column:
 
-    </p><div class="informaltable"><table class="informaltable" border="1"><colgroup><col /><col /><col /><col /></colgroup><thead><tr><th><em class="replaceable"><code>a</code></em></th><th><em class="replaceable"><code>b</code></em></th><th><em class="replaceable"><code>a</code></em> AND <em class="replaceable"><code>b</code></em></th><th><em class="replaceable"><code>a</code></em> OR <em class="replaceable"><code>b</code></em></th></tr></thead><tbody><tr><td>TRUE</td><td>TRUE</td><td>TRUE</td><td>TRUE</td></tr><tr><td>TRUE</td><td>FALSE</td><td>FALSE</td><td>TRUE</td></tr><tr><td>TRUE</td><td>NULL</td><td>NULL</td><td>TRUE</td></tr><tr><td>FALSE</td><td>FALSE</td><td>FALSE</td><td>FALSE</td></tr><tr><td>FALSE</td><td>NULL</td><td>FALSE</td><td>NULL</td></tr><tr><td>NULL</td><td>NULL</td><td>NULL</td><td>NULL</td></tr></tbody></table></div><p>
+    </p><div class="informaltable"><table class="informaltable" border="1"><colgroup><col /><col /><col /><col /></colgroup><thead><tr><th>AND</th><th>TRUE</th><th>FALSE</th><th>NULL</th></tr></thead><tbody><tr><th>TRUE</th><td>TRUE</td><td>FALSE</td><td>NULL</td></tr><tr><th>FALSE</th><td>FALSE</td><td>FALSE</td><td>FALSE</td></tr><tr><th>NULL</th><td>NULL</td><td>FALSE</td><td>NULL</td></tr></tbody></table></div><p>
 
-    </p><div class="informaltable"><table class="informaltable" border="1"><colgroup><col /><col /></colgroup><thead><tr><th><em class="replaceable"><code>a</code></em></th><th>NOT <em class="replaceable"><code>a</code></em></th></tr></thead><tbody><tr><td>TRUE</td><td>FALSE</td></tr><tr><td>FALSE</td><td>TRUE</td></tr><tr><td>NULL</td><td>NULL</td></tr></tbody></table></div><p>
+    </p><div class="informaltable"><table class="informaltable" border="1"><colgroup><col /><col /><col /><col /></colgroup><thead><tr><th>OR</th><th>TRUE</th><th>FALSE</th><th>NULL</th></tr></thead><tbody><tr><th>TRUE</th><td>TRUE</td><td>TRUE</td><td>TRUE</td></tr><tr><th>FALSE</th><td>TRUE</td><td>FALSE</td><td>NULL</td></tr><tr><th>NULL</th><td>TRUE</td><td>NULL</td><td>NULL</td></tr></tbody></table></div><p>
+
+    </p><div class="informaltable"><table class="informaltable" border="1"><colgroup><col /><col /><col /><col /></colgroup><thead><tr><th>NOT</th><th>TRUE</th><th>FALSE</th><th>NULL</th></tr></thead><tbody><tr><th> </th><td>FALSE</td><td>TRUE</td><td>NULL</td></tr></tbody></table></div><p>
    </p><p>
     The operators <code class="literal">AND</code> and <code class="literal">OR</code> are
     commutative, that is, you can switch the left and right operands

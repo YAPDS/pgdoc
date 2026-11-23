@@ -400,10 +400,16 @@ url = "/postgresql/devel/functions-formatting.html"
        <code class="literal">V</code> combined with a decimal point
        (e.g., <code class="literal">99.9V99</code> is not allowed).
       </p></li><li class="listitem"><p>
-       <code class="literal">EEEE</code> (scientific notation) cannot be used in
+       <code class="literal">EEEE</code> represents the exponent of a number written
+       in scientific notation.  The significand is always scaled to have
+       one digit before the decimal point.  Write digit and decimal point
+       patterns to control the number of fractional digits displayed.
+       For example, <code class="literal">9.99EEEE</code> specifies scientific
+       notation with two fractional digits.
+       <code class="literal">EEEE</code> cannot be used in
        combination with any of the other formatting patterns or
-       modifiers other than digit and decimal point patterns, and must be at the end of the format string
-       (e.g., <code class="literal">9.99EEEE</code> is a valid pattern).
+       modifiers other than digit and decimal point patterns,
+       and must be at the end of the format string.
       </p></li><li class="listitem"><p>
        In <code class="function">to_number()</code>, the <code class="literal">RN</code>
        pattern converts Roman numerals (in standard form) to numbers.

@@ -60,9 +60,10 @@ CREATE PUBLICATION <em class="replaceable"><code>name</code></em>
       Optionally, <code class="literal">*</code> can be specified after the
       <em class="replaceable"><code>table_name</code></em> to
       explicitly indicate that descendant tables are included.
-      This does not apply to a partitioned table, however.  The partitions of
-      a partitioned table are always implicitly considered part of the
-      publication, so they are never explicitly added to the publication.
+      For a partitioned table, <code class="literal">ONLY</code> and <code class="literal">*</code>
+      have no effect.  The partitions of a partitioned table are always
+      implicitly considered part of the publication, so they do not need to be
+      added explicitly.
      </p><p>
       If the optional <code class="literal">WHERE</code> clause is specified, it defines a
       <em class="firstterm">row filter</em> expression. Rows for

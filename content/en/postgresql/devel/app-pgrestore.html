@@ -13,8 +13,8 @@ url = "/postgresql/devel/app-pgrestore.html"
   </p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p id="id-1.9.4.19.4.1"><code class="command">pg_restore</code> [<em class="replaceable"><code>connection-option</code></em>...] [<em class="replaceable"><code>option</code></em>...] [<em class="replaceable"><code>filename</code></em>]</p></div></div><div class="refsect1" id="APP-PGRESTORE-DESCRIPTION"><h2>Description</h2><p>
    <span class="application">pg_restore</span> is a utility for restoring a
    <span class="productname">PostgreSQL</span> database from an archive
-   created by <a class="xref" href="app-pgdump.html" title="pg_dump"><span class="refentrytitle"><span class="application">pg_dump</span></span></a> in one of the non-plain-text
-   formats.  It will issue the commands necessary to reconstruct the
+   created by <a class="xref" href="app-pgdump.html" title="pg_dump"><span class="refentrytitle"><span class="application">pg_dump</span></span></a> in a format other than plain text.
+   It will issue the commands necessary to reconstruct the
    database to the state it was in at the time it was saved.  The
    archive files also allow <span class="application">pg_restore</span> to
    be selective about what is restored, or even to reorder the items
@@ -41,7 +41,8 @@ url = "/postgresql/devel/app-pgrestore.html"
     Restoring a dump causes the destination to execute arbitrary code of the
     source superusers' choice.  Partial dumps and partial restores do not limit
     that.  If the source superusers are not trusted, the dumped SQL statements
-    must be inspected before restoring.  Non-plain-text dumps can be inspected
+    must be inspected before restoring.  Dumps in formats other than plain
+    text can be inspected
     by using <span class="application">pg_restore</span>'s <code class="option">--file</code>
     option.  Note that the client running the dump and restore need not trust
     the source or destination superusers.

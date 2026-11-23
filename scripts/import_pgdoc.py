@@ -15,6 +15,8 @@ REVISIONS = SITE / "data" / "manual-sources-zh.json"
 REMOTE = "https://github.com/pgsty/pgdoc.git"
 BRANCH = "main"
 POSTGRES_REMOTE = "https://github.com/postgres/postgres.git"
+PG20_ARCHIVE_SHA256 = "49c73aa4c9cacef8ca979276a28ac416c08e9e54c9baee4ae5fd116a35fa13ac"
+PG20_BASELINE_COMMIT = "57926d757ab43852021d917b6221687a341c8385"
 
 
 def recorded_postgres_commits(versions):
@@ -24,6 +26,20 @@ def recorded_postgres_commits(versions):
     missing = [version for version, commit in commits.items() if not commit]
     if missing:
         raise ValueError(f"PostgreSQL source commit is required for {', '.join(missing)}")
+    return commits
+
+
+def postgres_commits_for_pgdoc(source: Path, versions):
+    # pgdoc binds the PG20 generated tables to its October 16 source snapshot.
+    # Use the matching Git tree when that archive is declared by this checkout.
+    commits = {}
+    makefile = source / "zh" / "20" / "Makefile"
+    if "devel" in versions and makefile.is_file():
+        if f"PGDOC_SOURCE_SHA256 ?= {PG20_ARCHIVE_SHA256}" in makefile.read_text(encoding="utf-8").splitlines():
+            commits["devel"] = PG20_BASELINE_COMMIT
+    remaining = [version for version in versions if version not in commits]
+    if remaining:
+        commits.update(recorded_postgres_commits(remaining))
     return commits
 
 
@@ -84,7 +100,7 @@ def import_pgdoc(source: Path, version: str, html_dir: Path = None,
             build_env = os.environ.copy()
             if postgres_source:
                 if not postgres_commit:
-                    postgres_commit = recorded_postgres_commits((version,))[version]
+                    postgres_commit = postgres_commits_for_pgdoc(source, (version,))[version]
                 staged_postgres = Path(temporary) / "postgres"
                 subprocess.run(
                     ["git", "clone", "--shared", "--no-checkout", "--quiet",
@@ -125,7 +141,7 @@ def main():
     parser.add_argument("--version", required=True, help="major version or devel (pgdoc zh/20)")
     parser.add_argument("--html-dir", type=Path, help="already built chunked HTML directory")
     parser.add_argument("--postgres-source", type=Path, help="local PostgreSQL Git checkout for offline build")
-    parser.add_argument("--postgres-commit", help="pinned PostgreSQL commit (defaults to this site's recorded revision)")
+    parser.add_argument("--postgres-commit", help="override the PostgreSQL commit used for the Chinese build")
     parser.add_argument("--postgres-remote", default=POSTGRES_REMOTE, help="PostgreSQL Git remote for automatic source fetch")
     args = parser.parse_args()
     try:
@@ -139,7 +155,7 @@ def main():
                 fetch_pgdoc(args.remote, source)
             commit = args.postgres_commit
             if html_dir is None and postgres_source is None:
-                commit = commit or recorded_postgres_commits((args.version,))[args.version]
+                commit = commit or postgres_commits_for_pgdoc(source, (args.version,))[args.version]
                 postgres_source = Path(temporary) / "postgres"
                 fetch_postgres_commits(args.postgres_remote, postgres_source, {args.version: commit})
             import_pgdoc(source, args.version, html_dir, postgres_source, commit)

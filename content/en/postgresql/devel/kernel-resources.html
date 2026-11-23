@@ -29,9 +29,7 @@ url = "/postgresql/devel/kernel-resources.html"
     (see <a class="xref" href="runtime-config-resource.html#GUC-SHARED-MEMORY-TYPE">shared_memory_type</a>).
 
     In addition a significant number of semaphores, which can be either
-    System V or POSIX style, are created at server startup.  Currently,
-    POSIX semaphores are used on Linux and FreeBSD systems while other
-    platforms use System V semaphores.
+    System V or POSIX style, are created at server startup.
    </p><p>
     System V <acronym class="acronym">IPC</acronym> features are typically constrained by
     system-wide allocation limits.
@@ -131,7 +129,6 @@ $ <strong class="userinput"><code>postgres -D $PGDATA -C num_os_semaphores</code
       </span></dt><dd><p>
         The default shared memory settings are usually good enough, unless
         you have set <code class="literal">shared_memory_type</code> to <code class="literal">sysv</code>.
-        System V semaphores are not used on this platform.
        </p><p>
         The default IPC settings can be changed using
         the <code class="command">sysctl</code> or
@@ -203,7 +200,6 @@ $ <strong class="userinput"><code>postgres -D $PGDATA -C num_os_semaphores</code
         The default shared memory settings are usually good enough, unless
         you have set <code class="literal">shared_memory_type</code> to <code class="literal">sysv</code>,
         and even then only on older kernel versions that shipped with low defaults.
-        System V semaphores are not used on this platform.
        </p><p>
         The shared memory size settings can be changed via the
         <code class="command">sysctl</code> interface.  For example, to allow 16 GB:

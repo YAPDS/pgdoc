@@ -245,12 +245,13 @@ GRANT EXECUTE ON FUNCTION pg_catalog.pg_read_binary_file(text, bigint, bigint, b
       <code class="filename">.DS_Store</code> as well as any file or directory
       beginning with <code class="filename">pgsql_tmp</code>, are omitted.
      </p></li><li class="step"><p>
-      Create a <code class="filename">backup_label</code> file to begin WAL replay at
-      the checkpoint created at failover and configure the
-      <code class="filename">pg_control</code> file with a minimum consistency LSN
-      defined as the result of <code class="literal">pg_current_wal_insert_lsn()</code>
-      when rewinding from a live source or the last checkpoint LSN when
-      rewinding from a stopped source.
+      Create a <code class="filename">backup_label</code> file to specify where WAL
+      replay must begin, and configure the <code class="filename">pg_control</code>
+      file with a minimum consistency LSN.
+      This LSN is obtained after copying the files.  For a live primary,
+      it is the result of <code class="function">pg_current_wal_flush_lsn()</code>;
+      for a live standby, it is the source's minimum recovery point;
+      for a stopped source, it is the last checkpoint LSN.
      </p></li><li class="step"><p>
       When starting the target, <span class="productname">PostgreSQL</span> replays
       all the required WAL, resulting in a data directory in a consistent

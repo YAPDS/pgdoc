@@ -84,11 +84,13 @@ typedef struct BackgroundWorker
       <a id="id-1.8.13.8.2.3.2.1.1" class="indexterm"></a>
       Requests termination of the background worker when its connected database is
       dropped, renamed, moved to a different tablespace, or used as a template for
-      <code class="command">CREATE DATABASE</code>. Specifically, the postmaster sends a
-      termination signal when any of these commands affect the worker's database:
+      <code class="command">CREATE DATABASE</code>. Specifically, a termination signal is
+      sent when any of these commands affect the worker's database:
       </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="command">DROP DATABASE</code></p></li><li class="listitem"><p><code class="command">ALTER DATABASE RENAME
        TO</code></p></li><li class="listitem"><p><code class="command">ALTER DATABASE SET
        TABLESPACE</code></p></li><li class="listitem"><p><code class="command">CREATE DATABASE</code></p></li></ul></div><p>
+      The worker is then restarted or unregistered as after any other exit,
+      depending on its exit code and <code class="structfield">bgw_restart_time</code>.
       Requires both <code class="literal">BGWORKER_SHMEM_ACCESS</code> and
       <code class="literal">BGWORKER_BACKEND_DATABASE_CONNECTION</code>.
      </p></dd></dl></div><p>

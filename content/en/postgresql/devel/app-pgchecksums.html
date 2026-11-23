@@ -47,7 +47,8 @@ url = "/postgresql/devel/app-pgchecksums.html"
         Enables checksums.
        </p></dd><dt><span class="term"><code class="option">-f <em class="replaceable"><code>filenode</code></em></code><br /></span><span class="term"><code class="option">--filenode=<em class="replaceable"><code>filenode</code></em></code></span></dt><dd><p>
         Only validate checksums in the relation with filenode
-        <em class="replaceable"><code>filenode</code></em>.
+        <em class="replaceable"><code>filenode</code></em>.  This option can only be used
+        together with <code class="option">--check</code>.
        </p></dd><dt><span class="term"><code class="option">-N</code><br /></span><span class="term"><code class="option">--no-sync</code></span></dt><dd><p>
         By default, <code class="command">pg_checksums</code> will wait for all files
         to be written safely to disk.  This option causes

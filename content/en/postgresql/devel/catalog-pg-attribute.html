@@ -63,6 +63,19 @@ url = "/postgresql/devel/catalog-pg-attribute.html"
        type-specific input functions and length coercion functions.
        The value will generally be -1 for types that do not need <code class="structfield">atttypmod</code>.
       </p></td></tr><tr><td class="catalog_table_entry"><p class="column_definition">
+       <code class="structfield">attversion</code> <code class="type">pg_lsn</code>
+      </p>
+      <p>
+       An attribute's version is set when the column is added and updated to a
+       larger value whenever the attribute's, or a preceding attribute's,
+       definition changes in a possibly incompatible way. It is used to detect
+       accesses to composite datums that are incompatible with the current
+       definition. The value is zero for attributes that are not versioned,
+       such as those of system catalogs and of relations without a row type,
+       or attributes of relations created in an earlier version that have been
+       migrated via <span class="application">pg_upgrade</span> from a version that
+       did not maintain attribute versions.
+      </p></td></tr><tr><td class="catalog_table_entry"><p class="column_definition">
        <code class="structfield">attndims</code> <code class="type">int2</code>
       </p>
       <p>
@@ -186,7 +199,9 @@ url = "/postgresql/devel/catalog-pg-attribute.html"
        <code class="structfield">attoptions</code> <code class="type">text[]</code>
       </p>
       <p>
-       Attribute-level options, as <span class="quote">“<span class="quote">keyword=value</span>”</span> strings
+       Attribute-level options, as <span class="quote">“<span class="quote">keyword=value</span>”</span> strings. Can
+       also contain some internal options prefixed with
+       <code class="literal">pg_</code>, which cannot be set via DDL.
       </p></td></tr><tr><td class="catalog_table_entry"><p class="column_definition">
        <code class="structfield">attfdwoptions</code> <code class="type">text[]</code>
       </p>

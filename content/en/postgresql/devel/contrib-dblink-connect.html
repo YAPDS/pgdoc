@@ -52,9 +52,9 @@ dblink_connect(text connname, text connstr) returns text
     authentication to connect to the remote database.  It can be specified
     for a foreign server or a user mapping.  A user mapping setting overrides
     the foreign server setting.  With SCRAM pass-through authentication,
-    <code class="filename">dblink</code> uses SCRAM-hashed secrets instead of plain-text
+    <code class="filename">dblink</code> uses SCRAM-hashed secrets instead of cleartext
     user passwords to connect to the remote server. This avoids storing
-    plain-text user passwords in PostgreSQL system catalogs.
+    storing user passwords as cleartext in PostgreSQL system catalogs.
     See the documentation of the equivalent <a class="link" href="postgres-fdw.html#POSTGRES-FDW-OPTION-USE-SCRAM-PASSTHROUGH"><code class="literal">use_scram_passthrough</code></a>
     option of postgres_fdw for further details and restrictions.
    </p><p>

@@ -124,15 +124,14 @@ url = "/postgresql/devel/app-pgcombinebackup.html"
        </p></dd><dt><span class="term"><code class="option">--sync-method=<em class="replaceable"><code>method</code></em></code></span></dt><dd><p>
         When set to <code class="literal">fsync</code>, which is the default,
         <code class="command">pg_combinebackup</code> will recursively open and synchronize
-        all files in the backup directory.  When the plain format is used, the
-        search for files will follow symbolic links for the WAL directory and
-        each configured tablespace.
+        all files in the output directory.  The search for files will follow
+        symbolic links for the WAL directory and each configured tablespace.
        </p><p>
         On Linux, <code class="literal">syncfs</code> may be used instead to ask the
         operating system to synchronize the whole file system that contains the
-        backup directory.  When the plain format is used,
-        <code class="command">pg_combinebackup</code> will also synchronize the file systems
-        that contain the WAL files and each tablespace.  See
+        output directory.  <code class="command">pg_combinebackup</code> will also
+        synchronize the file systems that contain the WAL files and each
+        tablespace.  See
         <a class="xref" href="runtime-config-error-handling.html#GUC-RECOVERY-INIT-SYNC-METHOD">recovery_init_sync_method</a> for information about
         the caveats to be aware of when using <code class="literal">syncfs</code>.
        </p><p>
@@ -158,10 +157,6 @@ url = "/postgresql/devel/app-pgcombinebackup.html"
    checksums disabled, stale checksums copied from an earlier backup are
    never verified.
   </p></div><div class="refsect1" id="id-1.9.4.12.8"><h2>Environment</h2><p>
-   This utility, like most other <span class="productname">PostgreSQL</span> utilities,
-   uses the environment variables supported by <span class="application">libpq</span>
-   (see <a class="xref" href="libpq-envars.html" title="32.14. Environment Variables">Section 32.14</a>).
-  </p><p>
    The environment variable <code class="envar">PG_COLOR</code> specifies whether to use
    color in diagnostic messages. Possible values are
    <code class="literal">always</code>, <code class="literal">auto</code> and

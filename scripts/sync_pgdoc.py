@@ -43,7 +43,7 @@ def sync_all(source: Path, refresh: bool = False, postgres_source: Path = None,
     with TemporaryDirectory(prefix="pgdoc-postgres-") as temporary:
         if postgres_source is None:
             postgres_source = Path(temporary) / "postgres"
-            commits = import_pgdoc.recorded_postgres_commits(changed)
+            commits = import_pgdoc.postgres_commits_for_pgdoc(source, changed)
             import_pgdoc.fetch_postgres_commits(postgres_remote, postgres_source, commits)
         for version in changed:
             print(f"Importing pgdoc {version} manual from {revision[:12]}", flush=True)

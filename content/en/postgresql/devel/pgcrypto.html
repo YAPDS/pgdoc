@@ -411,18 +411,18 @@ Applies to: pgp_sym_encrypt, pgp_pub_encrypt<br />
     created when the <code class="literal">cipher-algo</code> was unavailable under the
     OpenSSL configuration in use. Such faulty messages do not require the
     correct decryption key when <code class="literal">ignore-cipher-failure</code> is
-    enabled, so there is no guarantee that the decrypted plaintext actually
+    enabled, so there is no guarantee that the decrypted cleartext actually
     originated from a holder of the key.
    </p><p>
     Contrast the case of a message which was correctly encrypted, but the cipher
     that produced it is unavailable under the current <span class="productname">OpenSSL</span>
-    configuration. Recovering such plaintext via <code class="filename">pgcrypto</code>
+    configuration. Recovering such cleartext via <code class="filename">pgcrypto</code>
     requires making the actual cipher available to OpenSSL by, for example,
     enabling the appropriate provider. <code class="literal">ignore-cipher-failure</code>
     is not necessary or helpful for that scenario. If <span class="quote">“<span class="quote">decryption</span>”</span>
     of a correctly encrypted message with this option happens to pass PGP
     integrity checks, that result is coincidental and does not make the
-    recovered plaintext trustworthy.
+    recovered cleartext trustworthy.
    </p><div class="literallayout"><p><br />
 Values: 0, 1<br />
 Default: 0<br />
@@ -596,7 +596,7 @@ fips_mode() returns boolean
     All <code class="filename">pgcrypto</code> functions run inside the database server.
     That means that all
     the data and passwords move between <code class="filename">pgcrypto</code> and client
-    applications in clear text.  Thus you must:
+    applications in cleartext.  Thus you must:
    </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Connect locally or use SSL connections.</p></li><li class="listitem"><p>Trust both system and database administrator.</p></li></ol></div><p>
     If you cannot, then better do crypto inside client application.
    </p><p>

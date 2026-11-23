@@ -835,7 +835,7 @@ postgresql://%2Fvar%2Flib%2Fpostgresql/dbname
         The following methods may be specified:
 
         </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">password</code></span></dt><dd><p>
-            The server must request plaintext password authentication.
+            The server must request cleartext password authentication.
            </p></dd><dt><span class="term"><code class="literal">md5</code></span></dt><dd><p>
             The server must request MD5 hashed password authentication.
            </p><div class="warning"><h3 class="title">Warning</h3><p>
@@ -1083,7 +1083,7 @@ postgresql://%2Fvar%2Flib%2Fpostgresql/dbname
             start SSL handshake directly after establishing the TCP/IP
             connection.  This is only allowed with
             <code class="literal">sslmode=require</code> or higher, because the weaker
-            settings could lead to unintended fallback to plaintext
+            settings could lead to unintended fallback to cleartext
             authentication when the server does not support direct SSL
             handshake.
            </p></dd></dl></div></dd><dt id="LIBPQ-CONNECT-SSLCOMPRESSION"><span class="term"><code class="literal">sslcompression</code></span> <a href="#LIBPQ-CONNECT-SSLCOMPRESSION" class="id_link">#</a></dt><dd><p>

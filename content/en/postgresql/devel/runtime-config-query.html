@@ -27,30 +27,35 @@ url = "/postgresql/devel/runtime-config-query.html"
       </span> <a href="#GUC-ENABLE-ASYNC-APPEND" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of async-aware
         append plan types. The default is <code class="literal">on</code>.
-       </p></dd><dt id="GUC-ENABLE-BITMAPSCAN"><span class="term"><code class="varname">enable_bitmapscan</code> (<code class="type">boolean</code>)
+       </p></dd><dt id="GUC-ENABLE-ASYNC-MERGE-APPEND"><span class="term"><code class="varname">enable_async_merge_append</code> (<code class="type">boolean</code>)
       <a id="id-1.6.6.10.2.3.2.1.3" class="indexterm"></a>
-      <a id="id-1.6.6.10.2.3.2.1.4" class="indexterm"></a>
+      </span> <a href="#GUC-ENABLE-ASYNC-MERGE-APPEND" class="id_link">#</a></dt><dd><p>
+        Enables or disables the query planner's use of async-aware
+        merge-append plan types. The default is <code class="literal">on</code>.
+       </p></dd><dt id="GUC-ENABLE-BITMAPSCAN"><span class="term"><code class="varname">enable_bitmapscan</code> (<code class="type">boolean</code>)
+      <a id="id-1.6.6.10.2.3.3.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.3.1.4" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-BITMAPSCAN" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of bitmap-scan plan
         types. The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-DISTINCT-REORDERING"><span class="term"><code class="varname">enable_distinct_reordering</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.3.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.4.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-DISTINCT-REORDERING" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's ability to reorder DISTINCT
         keys to match the input path's pathkeys. The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-EAGER-AGGREGATE"><span class="term"><code class="varname">enable_eager_aggregate</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.4.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.5.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-EAGER-AGGREGATE" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's ability to partially push
         aggregation past a join, and finalize it once all the relations are
         joined. The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-GATHERMERGE"><span class="term"><code class="varname">enable_gathermerge</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.5.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.6.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-GATHERMERGE" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of gather
         merge plan types. The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-GROUP-BY-REORDERING"><span class="term"><code class="varname">enable_group_by_reordering</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.6.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.7.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-GROUP-BY-REORDERING" class="id_link">#</a></dt><dd><p>
         Controls if the query planner will produce a plan which will provide
         <code class="literal">GROUP BY</code> keys sorted in the order of keys of
@@ -60,34 +65,34 @@ url = "/postgresql/devel/runtime-config-query.html"
         if any. When enabled, the planner will try to produce a more
         efficient plan. The default value is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-GROUPAGG"><span class="term"><code class="varname">enable_groupagg</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.7.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.8.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-GROUPAGG" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of sort-based grouping
         and aggregation plan types. The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-HASHAGG"><span class="term"><code class="varname">enable_hashagg</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.8.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.9.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-HASHAGG" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of hashed
         aggregation plan types. The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-HASHJOIN"><span class="term"><code class="varname">enable_hashjoin</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.9.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.10.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-HASHJOIN" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of hash-join plan
         types. The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-INCREMENTAL-SORT"><span class="term"><code class="varname">enable_incremental_sort</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.10.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.11.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-INCREMENTAL-SORT" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of incremental sort steps.
         The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-INDEXSCAN"><span class="term"><code class="varname">enable_indexscan</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.11.1.3" class="indexterm"></a>
-      <a id="id-1.6.6.10.2.3.11.1.4" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.12.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.12.1.4" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-INDEXSCAN" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of index-scan and
         index-only-scan plan types.  The default is <code class="literal">on</code>.
         Also see <a class="xref" href="runtime-config-query.html#GUC-ENABLE-INDEXONLYSCAN">enable_indexonlyscan</a>.
        </p></dd><dt id="GUC-ENABLE-INDEXONLYSCAN"><span class="term"><code class="varname">enable_indexonlyscan</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.12.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.13.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-INDEXONLYSCAN" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of index-only-scan plan
         types (see <a class="xref" href="indexes-index-only-scans.html" title="11.9. Index-Only Scans and Covering Indexes">Section 11.9</a>).
@@ -95,7 +100,7 @@ url = "/postgresql/devel/runtime-config-query.html"
         <a class="xref" href="runtime-config-query.html#GUC-ENABLE-INDEXSCAN">enable_indexscan</a> setting must also be
         enabled to have the query planner consider index-only-scans.
        </p></dd><dt id="GUC-ENABLE-MATERIAL"><span class="term"><code class="varname">enable_material</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.13.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.14.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-MATERIAL" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of materialization.
         It is impossible to suppress materialization entirely,
@@ -103,7 +108,7 @@ url = "/postgresql/devel/runtime-config-query.html"
         materialize nodes except in cases where it is required for correctness.
         The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-MEMOIZE"><span class="term"><code class="varname">enable_memoize</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.14.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.15.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-MEMOIZE" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of memoize plans for
         caching results from parameterized scans inside nested-loop joins.
@@ -113,12 +118,12 @@ url = "/postgresql/devel/runtime-config-query.html"
         space is required for new entries. The default is
         <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-MERGEJOIN"><span class="term"><code class="varname">enable_mergejoin</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.15.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.16.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-MERGEJOIN" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of merge-join plan
         types. The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-NESTLOOP"><span class="term"><code class="varname">enable_nestloop</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.16.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.17.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-NESTLOOP" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of nested-loop join
         plans. It is impossible to suppress nested-loop joins entirely,
@@ -126,18 +131,18 @@ url = "/postgresql/devel/runtime-config-query.html"
         one if there are other methods available. The default is
         <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-PARALLEL-APPEND"><span class="term"><code class="varname">enable_parallel_append</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.17.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.18.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-PARALLEL-APPEND" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of parallel-aware
         append plan types. The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-PARALLEL-HASH"><span class="term"><code class="varname">enable_parallel_hash</code> (<code class="type">boolean</code>)
-       <a id="id-1.6.6.10.2.3.18.1.3" class="indexterm"></a>
+       <a id="id-1.6.6.10.2.3.19.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-PARALLEL-HASH" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of hash-join plan
         types with parallel hash. Has no effect if hash-join plans are not
         also enabled. The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-PARTITION-PRUNING"><span class="term"><code class="varname">enable_partition_pruning</code> (<code class="type">boolean</code>)
-       <a id="id-1.6.6.10.2.3.19.1.3" class="indexterm"></a>
+       <a id="id-1.6.6.10.2.3.20.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-PARTITION-PRUNING" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's ability to eliminate a
         partitioned table's partitions from query plans.  This also controls
@@ -146,7 +151,7 @@ url = "/postgresql/devel/runtime-config-query.html"
         default is <code class="literal">on</code>.
         See <a class="xref" href="ddl-partitioning.html#DDL-PARTITION-PRUNING" title="5.13.4. Partition Pruning">Section 5.13.4</a> for details.
        </p></dd><dt id="GUC-ENABLE-PARTITIONWISE-JOIN"><span class="term"><code class="varname">enable_partitionwise_join</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.20.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.21.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-PARTITIONWISE-JOIN" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of partitionwise join,
         which allows a join between partitioned tables to be performed by
@@ -161,7 +166,7 @@ url = "/postgresql/devel/runtime-config-query.html"
         query.  Query planning also becomes significantly more expensive in
         terms of memory and CPU.  The default value is <code class="literal">off</code>.
        </p></dd><dt id="GUC-ENABLE-PARTITIONWISE-AGGREGATE"><span class="term"><code class="varname">enable_partitionwise_aggregate</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.21.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.22.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-PARTITIONWISE-AGGREGATE" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of partitionwise grouping
         or aggregation, which allows grouping or aggregation on partitioned
@@ -177,7 +182,7 @@ url = "/postgresql/devel/runtime-config-query.html"
         more expensive in terms of memory and CPU.  The default value is
         <code class="literal">off</code>.
        </p></dd><dt id="GUC-ENABLE-PRESORTED-AGGREGATE"><span class="term"><code class="varname">enable_presorted_aggregate</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.22.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.23.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-PRESORTED-AGGREGATE" class="id_link">#</a></dt><dd><p>
         Controls if the query planner will produce a plan which will provide
         rows which are presorted in the order required for the query's
@@ -191,15 +196,15 @@ url = "/postgresql/devel/runtime-config-query.html"
         the order they require for aggregation.  The default value is
         <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-SELF-JOIN-ELIMINATION"><span class="term"><code class="varname">enable_self_join_elimination</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.23.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.24.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-SELF-JOIN-ELIMINATION" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's optimization which analyses
         the query tree and replaces self joins with semantically equivalent
         single scans.  Takes into consideration only plain tables.
         The default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-SEQSCAN"><span class="term"><code class="varname">enable_seqscan</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.24.1.3" class="indexterm"></a>
-      <a id="id-1.6.6.10.2.3.24.1.4" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.25.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.25.1.4" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-SEQSCAN" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of sequential scan
         plan types. It is impossible to suppress sequential scans
@@ -207,7 +212,7 @@ url = "/postgresql/devel/runtime-config-query.html"
         from using one if there are other methods available. The
         default is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-SORT"><span class="term"><code class="varname">enable_sort</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.25.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.26.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-SORT" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of explicit sort
         steps. It is impossible to suppress explicit sorts entirely,
@@ -215,7 +220,7 @@ url = "/postgresql/devel/runtime-config-query.html"
         using one if there are other methods available. The default
         is <code class="literal">on</code>.
        </p></dd><dt id="GUC-ENABLE-TIDSCAN"><span class="term"><code class="varname">enable_tidscan</code> (<code class="type">boolean</code>)
-      <a id="id-1.6.6.10.2.3.26.1.3" class="indexterm"></a>
+      <a id="id-1.6.6.10.2.3.27.1.3" class="indexterm"></a>
       </span> <a href="#GUC-ENABLE-TIDSCAN" class="id_link">#</a></dt><dd><p>
         Enables or disables the query planner's use of <acronym class="acronym">TID</acronym>
         scan plan types. The default is <code class="literal">on</code>.

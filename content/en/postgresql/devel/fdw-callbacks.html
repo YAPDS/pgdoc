@@ -1239,10 +1239,11 @@ IsForeignPathAsyncCapable(ForeignPath *path);
      Test whether a given <code class="structname">ForeignPath</code> path can scan
      the underlying foreign relation asynchronously.
      This function will only be called at the end of query planning when the
-     given path is a direct child of an <code class="structname">AppendPath</code>
-     path and when the planner believes that asynchronous execution improves
-     performance, and should return true if the given path is able to scan the
-     foreign relation asynchronously.
+     given path is a direct child of an <code class="structname">AppendPath</code> or
+     <code class="structname">MergeAppendPath</code> path and when the planner
+     believes that asynchronous execution improves performance, and should
+     return true if the given path is able to scan the foreign relation
+     asynchronously.
     </p><p>
      If this function is not defined, it is assumed that the given path scans
      the foreign relation using <code class="function">IterateForeignScan</code>.
@@ -1257,7 +1258,8 @@ ForeignAsyncRequest(AsyncRequest *areq);
      <code class="structname">ForeignScan</code> node.  <code class="literal">areq</code> is
      the <code class="structname">AsyncRequest</code> struct describing the
      <code class="structname">ForeignScan</code> node and the parent
-     <code class="structname">Append</code> node that requested the tuple from it.
+     <code class="structname">Append</code> or <code class="structname">MergeAppend</code>
+     node that requested the tuple from it.
      This function should store the tuple into the slot specified by
      <code class="literal">areq-&gt;result</code>, and set
      <code class="literal">areq-&gt;request_complete</code> to <code class="literal">true</code>;
@@ -1283,10 +1285,14 @@ ForeignAsyncConfigureWait(AsyncRequest *areq);
      This function will only be called when the
      <code class="structname">ForeignScan</code> node has the
      <code class="literal">areq-&gt;callback_pending</code> flag set, and should add
-     the event to the <code class="structfield">as_eventset</code> of the parent
-     <code class="structname">Append</code> node described by the
-     <code class="literal">areq</code>.  See the comments for
-     <code class="function">ExecAsyncConfigureWait</code> in
+     the event to the <code class="structname">WaitEventSet</code> associated with
+     the parent <code class="structname">Append</code> or
+     <code class="structname">MergeAppend</code> node described by the
+     <code class="literal">areq</code>.
+     It's recommended to use
+     <code class="function">ExecAsyncGetRequestorEventSet</code> to get the
+     <code class="structname">WaitEventSet</code> from the parent node.
+     See the comments for <code class="function">ExecAsyncConfigureWait</code> in
      <code class="filename">src/backend/executor/execAsync.c</code> for additional
      information.  When the file descriptor event occurs,
      <code class="function">ForeignAsyncNotify</code> will be called.

@@ -124,9 +124,12 @@ url = "/postgresql/devel/extend-extensions.html"
     </p><div class="variablelist"><dl class="variablelist"><dt id="EXTEND-EXTENSIONS-FILES-DIRECTORY"><span class="term"><code class="varname">directory</code> (<code class="type">string</code>)</span> <a href="#EXTEND-EXTENSIONS-FILES-DIRECTORY" class="id_link">#</a></dt><dd><p>
         The directory containing the extension's <acronym class="acronym">SQL</acronym> script
         file(s).  Unless an absolute path is given, the name is relative to
-        the directory where the control file was found.  By default,
-        the script files are looked for in the same directory where the
-        control file was found.
+        the parent of the <code class="filename">extension</code> directory where the
+        primary control file was found, that is, the installation's
+        <code class="literal">SHAREDIR</code> directory, or the corresponding
+        <a class="xref" href="runtime-config-client.html#GUC-EXTENSION-CONTROL-PATH">extension_control_path</a> element.  The default
+        behavior is equivalent to specifying
+        <code class="literal">directory = 'extension'</code>.
        </p></dd><dt id="EXTEND-EXTENSIONS-FILES-DEFAULT-VERSION"><span class="term"><code class="varname">default_version</code> (<code class="type">string</code>)</span> <a href="#EXTEND-EXTENSIONS-FILES-DEFAULT-VERSION" class="id_link">#</a></dt><dd><p>
         The default version of the extension (the one that will be installed
         if no version is specified in <code class="command">CREATE EXTENSION</code>).  Although

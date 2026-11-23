@@ -304,8 +304,9 @@ OPTIONS (ADD password_required 'false');
        <code class="command">COPY</code> command.
       </p></dd></dl></div></div><div class="sect3" id="POSTGRES-FDW-OPTIONS-ASYNCHRONOUS-EXECUTION"><div class="titlepage"><div><div><h4 class="title">F.40.1.5. Asynchronous Execution Options <a href="#POSTGRES-FDW-OPTIONS-ASYNCHRONOUS-EXECUTION" class="id_link">#</a></h4></div></div></div><p>
     <code class="filename">postgres_fdw</code> supports asynchronous execution, which
-    runs multiple parts of an <code class="structname">Append</code> node
-    concurrently rather than serially to improve performance.
+    runs multiple parts of an <code class="structname">Append</code> or
+    <code class="structname">MergeAppend</code> node concurrently rather than serially
+    to improve performance.
     This execution can be controlled using the following option:
    </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><code class="literal">async_capable</code> (<code class="type">boolean</code>)</span></dt><dd><p>
        This option controls whether <code class="filename">postgres_fdw</code> allows
@@ -323,8 +324,9 @@ OPTIONS (ADD password_required 'false');
        eliminate the overhead associated with running queries asynchronously.
       </p><p>
        Asynchronous execution is applied even when an
-       <code class="structname">Append</code> node contains subplan(s) executed
-       synchronously as well as subplan(s) executed asynchronously.
+       <code class="structname">Append</code> or <code class="structname">MergeAppend</code>
+       node contains subplan(s) executed synchronously as well as subplan(s)
+       executed asynchronously.
        In such a case, if the asynchronous subplans are ones processed using
        <code class="filename">postgres_fdw</code>, tuples from the asynchronous
        subplans are not returned until after at least one synchronous subplan
@@ -483,8 +485,8 @@ OPTIONS (ADD password_required 'false');
         A user mapping setting overrides the foreign server setting.
         With SCRAM pass-through authentication,
         <code class="filename">postgres_fdw</code> uses SCRAM-hashed secrets instead of
-        plain-text user passwords to connect to the remote server.  This
-        avoids storing plain-text user passwords in PostgreSQL system
+        cleartext user passwords to connect to the remote server.  This
+        avoids storing user passwords as cleartext in PostgreSQL system
         catalogs.
        </p><p>
         To use SCRAM pass-through authentication:

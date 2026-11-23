@@ -120,6 +120,8 @@ ALTER PUBLICATION <em class="replaceable"><code>name</code></em> RENAME TO <em c
       <code class="literal">*</code> can be specified after the
       <em class="replaceable"><code>table_name</code></em> to explicitly
       indicate that descendant tables are included.
+      For a partitioned table, <code class="literal">ONLY</code> and <code class="literal">*</code>
+      have no effect.
      </p><p>
       Optionally, a column list can be specified.  See <a class="xref" href="sql-createpublication.html" title="CREATE PUBLICATION"><span class="refentrytitle">CREATE PUBLICATION</span></a> for details. Note that a subscription
       having several publications in which the same table has been published
