@@ -2,8 +2,11 @@
 """Build and import a Chinese manual from pgsty/pgdoc's zh/ tree."""
 
 import argparse
+from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -15,8 +18,6 @@ REVISIONS = SITE / "data" / "manual-sources-zh.json"
 REMOTE = "https://github.com/pgsty/pgdoc.git"
 BRANCH = "main"
 POSTGRES_REMOTE = "https://github.com/postgres/postgres.git"
-PG20_ARCHIVE_SHA256 = "49c73aa4c9cacef8ca979276a28ac416c08e9e54c9baee4ae5fd116a35fa13ac"
-PG20_BASELINE_COMMIT = "57926d757ab43852021d917b6221687a341c8385"
 
 
 def recorded_postgres_commits(versions):
@@ -29,18 +30,59 @@ def recorded_postgres_commits(versions):
     return commits
 
 
-def postgres_commits_for_pgdoc(source: Path, versions):
-    # pgdoc binds the PG20 generated tables to its October 16 source snapshot.
-    # Use the matching Git tree when that archive is declared by this checkout.
-    commits = {}
+def pg20_snapshot(source: Path):
     makefile = source / "zh" / "20" / "Makefile"
-    if "devel" in versions and makefile.is_file():
-        if f"PGDOC_SOURCE_SHA256 ?= {PG20_ARCHIVE_SHA256}" in makefile.read_text(encoding="utf-8").splitlines():
-            commits["devel"] = PG20_BASELINE_COMMIT
-    remaining = [version for version in versions if version not in commits]
-    if remaining:
-        commits.update(recorded_postgres_commits(remaining))
-    return commits
+    if not makefile.is_file():
+        return None
+    text = makefile.read_text(encoding="utf-8")
+    if not re.search(r"^PGDOC_SOURCE_SHA256\s*[?:]?=", text, re.MULTILINE):
+        return None
+    match = re.search(r"^#.*\(snapshot ([^)]+)\)", text, re.MULTILINE)
+    if not match:
+        raise ValueError("pgdoc PG20 declares a source archive without a snapshot timestamp; use PG_COMMIT")
+    # pgdoc writes dates such as "16-Oct-2026 08:22 UTC".
+    try:
+        snapshot = parsedate_to_datetime(match[1].replace("-", " ", 2).replace(" UTC", " +0000"))
+        if snapshot.tzinfo is None:
+            raise ValueError("timestamp is missing a timezone")
+    except ValueError as error:
+        raise ValueError(f"Invalid pgdoc PG20 snapshot timestamp {match[1]!r}; use PG_COMMIT") from error
+    return snapshot.astimezone(timezone.utc)
+
+
+def pg20_snapshot_commit(repository: Path, snapshot: datetime):
+    for ref in ("refs/remotes/origin/master", "refs/heads/master"):
+        result = subprocess.run(
+            ["git", "-C", str(repository), "rev-list", "--first-parent", "-1",
+             f"--before={snapshot.isoformat()}", ref],
+            capture_output=True, text=True,
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            return result.stdout.strip()
+    raise ValueError(f"PostgreSQL master history has no commit for pgdoc PG20 snapshot {snapshot.isoformat()}")
+
+
+def prepare_postgres_sources(source: Path, versions, postgres_source: Path,
+                             postgres_remote: str, destination: Path):
+    snapshot = pg20_snapshot(source) if "devel" in versions else None
+    recorded = [version for version in versions if version != "devel" or snapshot is None]
+    commits = recorded_postgres_commits(recorded) if recorded else {}
+    if postgres_source is None:
+        postgres_source = destination
+        fetch_postgres_commits(postgres_remote, postgres_source, commits)
+        if snapshot:
+            # Fetch history on both sides of the cutoff without cloning the full repository.
+            since = (snapshot - timedelta(days=30)).isoformat()
+            subprocess.run(
+                ["git", "-C", str(postgres_source), "fetch", "--quiet", "--no-tags",
+                 f"--shallow-since={since}", "origin", "+refs/heads/master:refs/remotes/origin/master"],
+                check=True,
+            )
+    if snapshot:
+        commits["devel"] = pg20_snapshot_commit(postgres_source, snapshot)
+        print(f"Using PostgreSQL {commits['devel'][:12]} for pgdoc PG20 snapshot {snapshot.isoformat()}",
+              flush=True)
+    return postgres_source, commits
 
 
 def fetch_postgres_commits(remote: str, destination: Path, commits):
@@ -100,7 +142,9 @@ def import_pgdoc(source: Path, version: str, html_dir: Path = None,
             build_env = os.environ.copy()
             if postgres_source:
                 if not postgres_commit:
-                    postgres_commit = postgres_commits_for_pgdoc(source, (version,))[version]
+                    snapshot = pg20_snapshot(source) if version == "devel" else None
+                    postgres_commit = (pg20_snapshot_commit(postgres_source, snapshot) if snapshot
+                                       else recorded_postgres_commits((version,))[version])
                 staged_postgres = Path(temporary) / "postgres"
                 subprocess.run(
                     ["git", "clone", "--shared", "--no-checkout", "--quiet",
@@ -145,6 +189,8 @@ def main():
     parser.add_argument("--postgres-remote", default=POSTGRES_REMOTE, help="PostgreSQL Git remote for automatic source fetch")
     args = parser.parse_args()
     try:
+        if not VERSION.fullmatch(args.version):
+            raise ValueError("Version must be 'devel' or a PostgreSQL major version")
         html_dir = args.html_dir.resolve() if args.html_dir else None
         postgres_source = args.postgres_source.resolve() if args.postgres_source else None
         with TemporaryDirectory(prefix="pgdoc-import-") as temporary:
@@ -154,10 +200,16 @@ def main():
                 source = Path(temporary) / "pgdoc"
                 fetch_pgdoc(args.remote, source)
             commit = args.postgres_commit
-            if html_dir is None and postgres_source is None:
-                commit = commit or postgres_commits_for_pgdoc(source, (args.version,))[args.version]
-                postgres_source = Path(temporary) / "postgres"
-                fetch_postgres_commits(args.postgres_remote, postgres_source, {args.version: commit})
+            if html_dir is None:
+                if not commit:
+                    postgres_source, commits = prepare_postgres_sources(
+                        source, (args.version,), postgres_source, args.postgres_remote,
+                        Path(temporary) / "postgres",
+                    )
+                    commit = commits[args.version]
+                elif postgres_source is None:
+                    postgres_source = Path(temporary) / "postgres"
+                    fetch_postgres_commits(args.postgres_remote, postgres_source, {args.version: commit})
             import_pgdoc(source, args.version, html_dir, postgres_source, commit)
     except (FileNotFoundError, RuntimeError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Chinese manual import failed: {error}\n")

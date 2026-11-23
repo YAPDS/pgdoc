@@ -1,3 +1,4 @@
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -100,6 +101,7 @@ class ImportTests(unittest.TestCase):
             revisions.parent.mkdir()
             revisions.write_text('{"17":"abc123","18":"abc123","19":"abc123","devel":"abc123"}',
                                  encoding="utf-8")
+            (revisions.parent / "manual-sources.json").write_text(revisions.read_text(), encoding="utf-8")
             for version in sync_pgdoc.VERSIONS:
                 for path in (f"content/zh/postgresql/{version}/_index.html",
                              f"data/manual_nav/zh/{version}.json",
@@ -142,23 +144,41 @@ class ImportTests(unittest.TestCase):
             subprocess.run(["git", "-C", str(staged), "checkout", "--detach", "--quiet", commit], check=True)
             self.assertEqual((staged / "configure.ac").read_text(encoding="utf-8"), "PostgreSQL source")
 
-    def test_pgdoc_uses_pg20_translation_baseline_after_english_refresh(self):
+    def test_pgdoc_selects_new_pg20_baseline_when_snapshot_changes(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
+            upstream = root / "postgres"
+            subprocess.run(["git", "init", "--quiet", "--initial-branch=master", str(upstream)], check=True)
+            commits = []
+            for day in (16, 17, 18):
+                subprocess.run(
+                    ["git", "-C", str(upstream), "-c", "user.name=Test", "-c", "user.email=test@example.com",
+                     "commit", "--quiet", "--allow-empty", "-m", f"source {day}"],
+                    check=True,
+                    env={**os.environ, "GIT_AUTHOR_DATE": f"2026-10-{day}T08:00:00Z",
+                         "GIT_COMMITTER_DATE": f"2026-10-{day}T08:00:00Z"},
+                )
+                commits.append(subprocess.check_output(
+                    ["git", "-C", str(upstream), "rev-parse", "HEAD"], text=True,
+                ).strip())
+
             makefile = root / "zh/20/Makefile"
             makefile.parent.mkdir(parents=True)
-            makefile.write_text(
-                f"PGDOC_SOURCE_SHA256 ?= {import_pgdoc.PG20_ARCHIVE_SHA256}\n", encoding="utf-8",
-            )
             (root / "data").mkdir()
             (root / "data/manual-sources.json").write_text(
-                '{"devel":"new-english-commit","18":"release-commit"}', encoding="utf-8",
+                f'{{"devel":"{commits[2]}","18":"{commits[2]}"}}', encoding="utf-8",
             )
             with patch.object(import_pgdoc, "SITE", root):
-                self.assertEqual(
-                    import_pgdoc.postgres_commits_for_pgdoc(root, ("devel", "18")),
-                    {"devel": import_pgdoc.PG20_BASELINE_COMMIT, "18": "release-commit"},
-                )
+                for day, sha, expected in ((16, "a", commits[0]), (17, "b", commits[1])):
+                    with self.subTest(day=day):
+                        makefile.write_text(
+                            f"# PG20 baseline (snapshot {day}-Oct-2026 08:22 UTC).\n"
+                            f"PGDOC_SOURCE_SHA256 ?= {sha * 64}\n", encoding="utf-8",
+                        )
+                        _, selected = import_pgdoc.prepare_postgres_sources(
+                            root, ("devel", "18"), None, upstream.as_uri(), root / f"fetched-{day}",
+                        )
+                        self.assertEqual(selected, {"devel": expected, "18": commits[2]})
 
     def test_pgdoc_sync_fetches_only_needed_postgres_commits(self):
         with tempfile.TemporaryDirectory() as temporary:
