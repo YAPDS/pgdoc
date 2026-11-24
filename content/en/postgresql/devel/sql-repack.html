@@ -148,8 +148,15 @@ REPACK [ ( <em class="replaceable"><code>option</code></em> [, ...] ) ] USING IN
     the table using either an index scan on the specified index, or a
     sequential scan followed by sorting.  It will attempt to choose the method
     that will be faster, based on planner cost parameters and available
-    statistical information.  When clustering on an index of an access method
-    other than B-Tree, <code class="command">REPACK</code> always uses an index scan.
+    statistical information.  Setting <a class="xref" href="runtime-config-query.html#GUC-ENABLE-INDEXSCAN">enable_indexscan</a>
+    to <code class="literal">off</code> forces a sequential scan and sort, regardless
+    of <a class="xref" href="runtime-config-query.html#GUC-ENABLE-SORT">enable_sort</a> and <a class="xref" href="runtime-config-query.html#GUC-ENABLE-SEQSCAN">enable_seqscan</a>.
+    Otherwise, setting either <code class="varname">enable_sort</code> or
+    <code class="varname">enable_seqscan</code> to <code class="literal">off</code> favors an
+    index scan, provided the index is usable.
+   </p><p>
+    When clustering on an index of an access method other than B-Tree,
+    <code class="command">REPACK</code> always uses an index scan.
    </p><p>
     Because the planner records statistics about the ordering of tables, it is
     advisable to specify the <code class="literal">ANALYZE</code> option, or to
@@ -170,7 +177,9 @@ REPACK [ ( <em class="replaceable"><code>option</code></em> [, ...] ) ] USING IN
     file of up to the size of the table is needed in addition to the above.
     This method is usually faster than an index scan, but if the disk space
     requirement is intolerable, you can disable this choice by temporarily
-    setting <a class="xref" href="runtime-config-query.html#GUC-ENABLE-SORT">enable_sort</a> to <code class="literal">off</code>; or
+    setting <a class="xref" href="runtime-config-query.html#GUC-ENABLE-SORT">enable_sort</a> to <code class="literal">off</code>
+    (subject to the conditions described in
+    <a class="xref" href="sql-repack.html#SQL-REPACK-NOTES-ON-CLUSTERING" title="Notes on Clustering">Notes on Clustering</a>); or
     omitting <code class="literal">USING INDEX</code> if the table doesn't need to be
     reordered.
    </p><p>

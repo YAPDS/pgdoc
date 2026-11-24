@@ -271,6 +271,7 @@ typedef bool (*LogicalDecodeFilterByOriginCB) (struct LogicalDecodingContext *ct
 </p><pre class="programlisting">
 typedef void (*LogicalDecodeMessageCB) (struct LogicalDecodingContext *ctx,
                                         ReorderBufferTXN *txn,
+                                        TransactionId xid,
                                         XLogRecPtr message_lsn,
                                         bool transactional,
                                         const char *prefix,
@@ -281,7 +282,11 @@ typedef void (*LogicalDecodeMessageCB) (struct LogicalDecodingContext *ctx,
       the transaction, like the time stamp at which it has been committed and
       its XID. Note however that it can be NULL when the message is
       non-transactional and the XID was not assigned yet in the transaction
-      which logged the message. The <em class="parameter"><code>lsn</code></em> has WAL
+      which logged the message. The <em class="parameter"><code>xid</code></em> parameter is
+      the XID of the transaction that emitted the message; for a
+      transactional message emitted in a subtransaction, it is the
+      subtransaction's XID while <em class="parameter"><code>txn</code></em> is the top-level
+      transaction. The <em class="parameter"><code>lsn</code></em> has WAL
       location of the message. The <em class="parameter"><code>transactional</code></em> says
       if the message was sent as transactional or not. Similar to the change
       callback, in case of decoding a prepared (but yet uncommitted)
@@ -436,12 +441,19 @@ typedef void (*LogicalDecodeStreamChangeCB) (struct LogicalDecodingContext *ctx,
 </p><pre class="programlisting">
 typedef void (*LogicalDecodeStreamMessageCB) (struct LogicalDecodingContext *ctx,
                                               ReorderBufferTXN *txn,
+                                              TransactionId xid,
                                               XLogRecPtr message_lsn,
                                               bool transactional,
                                               const char *prefix,
                                               Size message_size,
                                               const char *message);
 </pre><p>
+      The <em class="parameter"><code>txn</code></em> parameter is the top-level transaction
+      being streamed, and <em class="parameter"><code>xid</code></em> is the XID of the
+      transaction that emitted the message, which is a subtransaction's XID
+      if it was emitted in one. For the other stream callbacks, the XID of
+      the subtransaction is available as
+      <code class="literal">change-&gt;txn-&gt;xid</code>.
      </p></div><div class="sect3" id="LOGICALDECODING-OUTPUT-PLUGIN-STREAM-TRUNCATE"><div class="titlepage"><div><div><h4 class="title">47.7.4.21. Stream Truncate Callback <a href="#LOGICALDECODING-OUTPUT-PLUGIN-STREAM-TRUNCATE" class="id_link">#</a></h4></div></div></div><p>
       The optional <code class="function">stream_truncate_cb</code> callback is called
       for a <code class="command">TRUNCATE</code> command in a block of streamed changes
