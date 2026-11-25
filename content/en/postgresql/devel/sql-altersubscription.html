@@ -231,7 +231,15 @@ ALTER SUBSCRIPTION <em class="replaceable"><code>name</code></em> RENAME TO <em 
       When the <a class="link" href="sql-createsubscription.html#SQL-CREATESUBSCRIPTION-PARAMS-WITH-CONFLICT-LOG-DESTINATION"><code class="literal">conflict_log_destination</code></a>
       parameter is set to <code class="literal">table</code> or <code class="literal">all</code>, the system
       automatically creates the conflict log table. Conversely, if the destination is changed to
-      <code class="literal">log</code>, the conflict log table is automatically dropped.
+      <code class="literal">log</code>, logging to the table stops and the conflict log
+      table is automatically dropped.
+     </p><p>
+      When <a class="link" href="sql-createsubscription.html#SQL-CREATESUBSCRIPTION-PARAMS-WITH-TWO-PHASE"><code class="literal">two_phase</code></a>
+      is enabled, changing <a class="link" href="sql-createsubscription.html#SQL-CREATESUBSCRIPTION-PARAMS-WITH-CONFLICT-LOG-DESTINATION"><code class="literal">conflict_log_destination</code></a>
+      from <code class="literal">table</code> or <code class="literal">all</code> to
+      <code class="literal">log</code> is only allowed when the subscription is disabled
+      and there are no pending prepared transactions, because such transactions
+      may hold a lock on the conflict log table being dropped.
      </p></dd><dt id="SQL-ALTERSUBSCRIPTION-PARAMS-SKIP"><span class="term"><code class="literal">SKIP ( <em class="replaceable"><code>skip_option</code></em> = <em class="replaceable"><code>value</code></em> )</code></span> <a href="#SQL-ALTERSUBSCRIPTION-PARAMS-SKIP" class="id_link">#</a></dt><dd><p>
       Skips applying all changes of the remote transaction.  If incoming data
       violates any constraints, logical replication will stop until it is

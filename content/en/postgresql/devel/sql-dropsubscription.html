@@ -55,11 +55,19 @@ DROP SUBSCRIPTION [ IF EXISTS ] <em class="replaceable"><code>name</code></em> [
    If a subscription is associated with a replication slot, then <code class="command">DROP
    SUBSCRIPTION</code> cannot be executed inside a transaction block.
   </p><p>
-   If a conflict log table exists for the subscription (that is, when
-   <a class="link" href="sql-createsubscription.html#SQL-CREATESUBSCRIPTION-PARAMS-WITH-CONFLICT-LOG-DESTINATION">
+   If <a class="link" href="sql-createsubscription.html#SQL-CREATESUBSCRIPTION-PARAMS-WITH-CONFLICT-LOG-DESTINATION">
    <code class="literal">conflict_log_destination</code></a> is set to <code class="literal">table</code>
-   or <code class="literal">all</code>), <code class="command">DROP SUBSCRIPTION</code> automatically drops
-   the associated conflict log table.
+   or <code class="literal">all</code>, the subscription has an associated conflict log
+   table, which <code class="command">DROP SUBSCRIPTION</code> drops along with the
+   subscription. However, <code class="command">DROP SUBSCRIPTION</code> cannot be
+   executed while the subscription has prepared transactions (see
+   <a class="link" href="sql-createsubscription.html#SQL-CREATESUBSCRIPTION-PARAMS-WITH-TWO-PHASE"><code class="literal">two_phase</code></a>),
+   because such a transaction may hold a lock on the conflict log table that is
+   released only when the apply worker processes the corresponding
+   <code class="command">COMMIT PREPARED</code> or <code class="command">ROLLBACK PREPARED</code>.
+   Resolve these transactions first (see
+   <a class="link" href="view-pg-prepared-xacts.html" title="53.18. pg_prepared_xacts"><code class="structname">pg_prepared_xacts</code></a>)
+   before dropping the subscription.
   </p></div><div class="refsect1" id="id-1.9.3.133.8"><h2>Examples</h2><p>
    Drop a subscription:
 </p><pre class="programlisting">
