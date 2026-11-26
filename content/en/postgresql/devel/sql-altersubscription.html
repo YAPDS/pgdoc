@@ -232,7 +232,8 @@ ALTER SUBSCRIPTION <em class="replaceable"><code>name</code></em> RENAME TO <em 
       parameter is set to <code class="literal">table</code> or <code class="literal">all</code>, the system
       automatically creates the conflict log table. Conversely, if the destination is changed to
       <code class="literal">log</code>, logging to the table stops and the conflict log
-      table is automatically dropped.
+      table is automatically dropped. This fails if any other objects depend on
+      the conflict log table.
      </p><p>
       When <a class="link" href="sql-createsubscription.html#SQL-CREATESUBSCRIPTION-PARAMS-WITH-TWO-PHASE"><code class="literal">two_phase</code></a>
       is enabled, changing <a class="link" href="sql-createsubscription.html#SQL-CREATESUBSCRIPTION-PARAMS-WITH-CONFLICT-LOG-DESTINATION"><code class="literal">conflict_log_destination</code></a>

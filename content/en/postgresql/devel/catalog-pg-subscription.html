@@ -140,6 +140,24 @@ url = "/postgresql/devel/catalog-pg-subscription.html"
       <p>
        Foreign server to use for the connection string. Zero if <code class="structfield">subconninfo</code> is nonnull.
       </p></td></tr><tr><td class="catalog_table_entry"><p class="column_definition">
+       <code class="structfield">subconflictlogrelid</code> <code class="type">oid</code>
+       (references <a class="link" href="catalog-pg-class.html" title="52.11. pg_class"><code class="structname">pg_class</code></a>.<code class="structfield">oid</code>)
+      </p>
+      <p>
+       OID of the subscription conflict log table created in the
+       <code class="literal">pg_conflict</code> namespace, or zero if
+       <a class="link" href="sql-createsubscription.html#SQL-CREATESUBSCRIPTION-PARAMS-WITH-CONFLICT-LOG-DESTINATION"><code class="literal">conflict_log_destination</code></a>
+       is set to <code class="literal">log</code>.
+      </p></td></tr><tr><td class="catalog_table_entry"><p class="column_definition">
+       <code class="structfield">subconflictlogdest</code> <code class="type">text</code>
+      </p>
+      <p>
+       The destination for conflict logging: <code class="literal">log</code> (server
+       log only), <code class="literal">table</code> (conflict log table only), or
+       <code class="literal">all</code> (both). See
+       <a class="link" href="sql-createsubscription.html#SQL-CREATESUBSCRIPTION-PARAMS-WITH-CONFLICT-LOG-DESTINATION"><code class="literal">conflict_log_destination</code></a>
+       for details.
+      </p></td></tr><tr><td class="catalog_table_entry"><p class="column_definition">
        <code class="structfield">subconninfo</code> <code class="type">text</code>
       </p>
       <p>

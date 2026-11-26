@@ -286,10 +286,13 @@ typedef void (*LogicalDecodeMessageCB) (struct LogicalDecodingContext *ctx,
       the XID of the transaction that emitted the message; for a
       transactional message emitted in a subtransaction, it is the
       subtransaction's XID while <em class="parameter"><code>txn</code></em> is the top-level
-      transaction. The <em class="parameter"><code>lsn</code></em> has WAL
-      location of the message. The <em class="parameter"><code>transactional</code></em> says
-      if the message was sent as transactional or not. Similar to the change
-      callback, in case of decoding a prepared (but yet uncommitted)
+      transaction. The <em class="parameter"><code>message_lsn</code></em> is the start of
+      the message's WAL record for a transactional message, like the LSN of
+      the other changes in the transaction. For a non-transactional message
+      it is the end of the record.
+      The <em class="parameter"><code>transactional</code></em>
+      says if the message was sent as transactional or not. Similar to the
+      change callback, in case of decoding a prepared (but yet uncommitted)
       transaction or decoding of an uncommitted transaction, this message
       callback might also error out due to simultaneous rollback of
       this very same transaction. In that case, the logical decoding of this
@@ -454,6 +457,8 @@ typedef void (*LogicalDecodeStreamMessageCB) (struct LogicalDecodingContext *ctx
       if it was emitted in one. For the other stream callbacks, the XID of
       the subtransaction is available as
       <code class="literal">change-&gt;txn-&gt;xid</code>.
+      The <em class="parameter"><code>message_lsn</code></em> is the start of the message's
+      WAL record, as only transactional messages are passed to this callback.
      </p></div><div class="sect3" id="LOGICALDECODING-OUTPUT-PLUGIN-STREAM-TRUNCATE"><div class="titlepage"><div><div><h4 class="title">47.7.4.21. Stream Truncate Callback <a href="#LOGICALDECODING-OUTPUT-PLUGIN-STREAM-TRUNCATE" class="id_link">#</a></h4></div></div></div><p>
       The optional <code class="function">stream_truncate_cb</code> callback is called
       for a <code class="command">TRUNCATE</code> command in a block of streamed changes
